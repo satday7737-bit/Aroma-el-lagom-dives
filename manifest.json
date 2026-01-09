@@ -1,0 +1,23 @@
+{
+  "name": "Aroma el lagom dives 상담차트",
+  "short_name": "Aroma 상담차트",
+  "description": "오행·체질·호르몬·로블코코/엘라곰 제품·시술권·예약까지 한 번에 관리하는 1:1 프라이빗 상담 프로그램",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f1eb",
+  "theme_color": "#f5f1eb",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
