@@ -1,2015 +1,1001 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <title>Aroma el lagom dives 상담차트</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>Aroma el lagom dives · 고객 상담 차트</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- PWA & 아이콘 -->
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <meta name="theme-color" content="#f5f1eb" />
+    <!-- 앱 아이콘 & PWA 설정 -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/roblecoco_icon_192.png" />
+    <link rel="apple-touch-icon" href="icons/roblecoco_icon_512.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#000000" />
 
-  <style>
-    :root {
-      --bg-body: #f5f1eb;
-      --bg-shell: #fdfbf7;
-      --bg-panel-left: #f9f4ed;
-      --bg-panel-right: #ffffff;
-      --accent: #b89c6b;
-      --accent-deep: #8f6c3a;
-      --text-main: #2f2724;
-      --text-soft: #7c7068;
-      --border-soft: #e0d6c8;
-      --shadow-soft: 0 18px 40px rgba(0,0,0,0.08);
-      --radius-lg: 20px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-      background: radial-gradient(circle at top left, #f8eee1 0, #f5f1eb 40%, #efe7dd 100%);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .app-shell {
-      width: 100%;
-      max-width: 1200px;
-      background: var(--bg-shell);
-      border-radius: 32px;
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .app-header {
-      padding: 18px 26px 10px;
-      border-bottom: 1px solid var(--border-soft);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px 18px;
-      background: linear-gradient(135deg, #f7efe3 0%, #fdfbf7 55%, #f7f1e8 100%);
-    }
-
-    .app-title-block { flex: 1; min-width: 220px; }
-
-    .app-title {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent-deep);
-    }
-
-    .app-subtitle {
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-top: 4px;
-    }
-
-    .badge {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      padding: 5px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,0.08);
-      background: radial-gradient(circle at top, rgba(255,255,255,0.7), rgba(255,255,255,0.1));
-      color: var(--text-soft);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.05);
-    }
-
-    .app-main {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
-      gap: 0;
-      min-height: 560px;
-    }
-
-    @media (max-width: 880px) {
-      .app-main { grid-template-columns: 1fr; }
-    }
-
-    .panel { padding: 20px 24px 24px; }
-
-    .panel-left {
-      border-right: 1px solid var(--border-soft);
-      background: var(--bg-panel-left);
-    }
-
-    @media (max-width: 880px) {
-      .panel-left {
-        border-right: none;
-        border-bottom: 1px solid var(--border-soft);
+    <style>
+      * {
+        box-sizing: border-box;
       }
-    }
 
-    .panel-right { background: var(--bg-panel-right); }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Spoqa Han Sans Neo",
+          "Apple SD Gothic Neo", system-ui, sans-serif;
+        background: #f4ede3;
+        color: #2b2215;
+      }
 
-    .panel-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: var(--text-main);
-    }
+      .app-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px;
+      }
 
-    .label {
-      font-size: 11px;
-      font-weight: 500;
-      margin-bottom: 6px;
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
+      .app-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+      }
 
-    .field-group { margin-bottom: 12px; }
+      .app-subtitle {
+        font-size: 0.85rem;
+        color: #7d6b52;
+        margin-bottom: 16px;
+      }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
+      .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
 
-    @media (max-width: 520px) {
-      .grid-2 { grid-template-columns: 1fr; }
-    }
+      .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-    .field-label {
-      font-size: 12px;
-      color: var(--text-soft);
-      margin-bottom: 4px;
-    }
+      .brand-badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #2d2620;
+        color: #f9f3eb;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+      }
 
-    input[type="text"],
-    input[type="date"],
-    input[type="number"],
-    input[type="datetime-local"],
-    select {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid var(--border-soft);
-      padding: 8px 12px;
-      font-family: inherit;
-      font-size: 13px;
-      background: #fbf7f1;
-      color: var(--text-main);
-      outline: none;
-      transition: box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
+      .today-chip {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid #d3c3aa;
+        font-size: 0.78rem;
+        background: rgba(255, 255, 255, 0.7);
+      }
 
-    input[type="text"]:focus,
-    input[type="date"]:focus,
-    input[type="number"]:focus,
-    input[type="datetime-local"]:focus,
-    select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(184, 156, 107, 0.5);
-      background: #fffdf7;
-    }
+      .top-bar-right {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        color: #7b6a52;
+      }
 
-    textarea {
-      width: 100%;
-      min-height: 120px;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-soft);
-      padding: 14px 14px 16px;
-      font-family: inherit;
-      font-size: 14px;
-      resize: vertical;
-      background: #fbf7f1;
-      color: var(--text-main);
-      outline: none;
-      transition: box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
+      .pill {
+        padding: 3px 8px;
+        border-radius: 999px;
+        border: 1px solid #d5c9b5;
+        background: rgba(255, 255, 255, 0.6);
+      }
 
-    textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(184, 156, 107, 0.5);
-      background: #fffdf7;
-    }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
+        gap: 14px;
+      }
 
-    .hint {
-      font-size: 11px;
-      color: var(--text-soft);
-      margin-top: 6px;
-      line-height: 1.6;
-    }
+      @media (max-width: 960px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
 
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-      align-items: center;
-      justify-content: space-between;
-    }
+        .top-bar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
 
-    .btn-primary {
-      padding: 9px 18px;
-      border-radius: 999px;
-      border: none;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      background: linear-gradient(135deg, #d4b067, #8f6c3a);
-      color: #fff;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.15);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-    }
+        .top-bar-right {
+          align-self: stretch;
+          justify-content: space-between;
+        }
+      }
 
-    .btn-primary:active {
-      transform: translateY(1px);
-      box-shadow: 0 9px 18px rgba(0,0,0,0.18);
-    }
+      .card {
+        background: rgba(255, 255, 255, 0.94);
+        border-radius: 14px;
+        padding: 14px 14px 16px;
+        box-shadow: 0 10px 30px rgba(57, 39, 12, 0.08);
+        border: 1px solid rgba(218, 201, 174, 0.8);
+      }
 
-    .btn-secondary {
-      padding: 7px 14px;
-      border-radius: 999px;
-      border: 1px dashed rgba(0,0,0,0.16);
-      font-size: 12px;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
-    }
+      .card + .card {
+        margin-top: 10px;
+      }
 
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.6);
-      border-color: var(--accent);
-      color: var(--text-main);
-    }
+      .card-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
 
-    .meta-line {
-      font-size: 11px;
-      color: var(--text-soft);
-      margin-top: 4px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+      .card-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #756147;
+      }
 
-    .meta-pill {
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(0,0,0,0.08);
-    }
+      .card-caption {
+        font-size: 0.75rem;
+        color: #9b8463;
+      }
 
-    .result-section {
-      margin-bottom: 14px;
-      padding: 12px 14px;
-      border-radius: 18px;
-      background: #fbf8f2;
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-    }
+      .section-title {
+        font-size: 0.86rem;
+        font-weight: 600;
+        margin: 8px 0 4px;
+        color: #4d3b28;
+      }
 
-    .result-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-      margin-bottom: 6px;
-    }
+      .field-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 6px;
+      }
 
-    .result-body {
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-main);
-      white-space: pre-line;
-    }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
 
-    .result-body strong {
-      color: var(--accent-deep);
-      font-weight: 600;
-    }
+      .field-label {
+        font-size: 0.76rem;
+        color: #7b6a52;
+      }
 
-    .result-header {
-      margin-bottom: 10px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: #faf4ea;
-      border: 1px solid var(--border-soft);
-      font-size: 12px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 6px 16px;
-    }
+      .field-label.small {
+        font-size: 0.7rem;
+      }
 
-    @media (max-width: 720px) {
-      .result-header { grid-template-columns: 1fr; }
-    }
+      .field-note {
+        font-size: 0.7rem;
+        color: #a08861;
+      }
 
-    .result-header-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 14px;
-      align-items: baseline;
-    }
+      input[type="text"],
+      input[type="tel"],
+      input[type="number"],
+      input[type="date"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 6px 8px;
+        border-radius: 8px;
+        border: 1px solid #d6c6af;
+        font-size: 0.8rem;
+        font-family: inherit;
+        background: rgba(255, 255, 255, 0.95);
+        color: #2b2215;
+      }
 
-    .result-label { color: var(--text-soft); }
-    .result-value { font-weight: 500; color: var(--accent-deep); }
+      textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
 
-    .footer {
-      padding: 8px 24px 10px;
-      border-top: 1px solid var(--border-soft);
-      font-size: 11px;
-      color: var(--text-soft);
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      background: #f3ebe1;
-    }
+      input::placeholder,
+      textarea::placeholder {
+        color: #c1ae8c;
+      }
 
-    .search-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 4px;
-      align-items: center;
-    }
+      .small-row {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        margin-bottom: 4px;
+        flex-wrap: wrap;
+      }
 
-    .product-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-top: 6px;
-    }
+      .tag-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 2px;
+      }
 
-    .product-row input[type="text"],
-    .product-row input[type="number"],
-    .product-row input[type="datetime-local"],
-    .product-row select {
-      flex: 1;
-    }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        border-radius: 999px;
+        padding: 3px 7px;
+        font-size: 0.7rem;
+        border: 1px solid #d0c1a9;
+        background: #fdf7ee;
+        cursor: pointer;
+      }
 
-    .product-note { margin-top: 6px; }
+      .tag input {
+        accent-color: #b7904a;
+      }
 
-    .product-list {
-      font-size: 13px;
-      line-height: 1.6;
-    }
+      .tag.negative {
+        border-style: dashed;
+        border-color: #d6b7b7;
+        background: #fdf1f1;
+      }
 
-    .product-item {
-      padding: 6px 0;
-      border-bottom: 1px dashed rgba(0,0,0,0.08);
-    }
+      .tag.positive {
+        border-color: #b0d1b8;
+        background: #f1faf3;
+      }
 
-    .product-item:last-child { border-bottom: none; }
+      .hint-box {
+        font-size: 0.74rem;
+        color: #8a7456;
+        background: #fbf3e6;
+        border-radius: 10px;
+        padding: 6px 8px;
+        border: 1px dashed #d2c0a4;
+        margin-top: 4px;
+      }
 
-    .product-name { font-weight: 600; color: var(--accent-deep); }
+      .hint-box strong {
+        color: #5d4528;
+      }
 
-    .product-meta {
-      font-size: 11px;
-      color: var(--text-soft);
-    }
+      .divider {
+        border: none;
+        border-top: 1px dashed #e0d1bb;
+        margin: 8px 0;
+      }
 
-    .history-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 12px;
-    }
+      .muted {
+        font-size: 0.74rem;
+        color: #a08c6c;
+      }
 
-    .history-item {
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,0.08);
-      background: rgba(255,255,255,0.7);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
-    }
+      .muted strong {
+        color: #6b5335;
+      }
 
-    .history-item:hover {
-      background: #f8eddc;
-      border-color: var(--accent);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
+      .inline-note {
+        font-size: 0.7rem;
+        color: #aa9371;
+      }
 
-    .history-item.active {
-      background: linear-gradient(135deg, #d4b067, #8f6c3a);
-      color: #fff;
-      border-color: rgba(0,0,0,0.2);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
 
-    .history-item.active .history-date,
-    .history-item.active .history-badge {
-      color: #fff;
-    }
+      .btn {
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: none;
+        font-size: 0.78rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        letter-spacing: 0.03em;
+      }
 
-    .history-date { font-weight: 500; }
+      .btn-primary {
+        background: linear-gradient(135deg, #2f2520, #4b3829);
+        color: #fdf6ec;
+      }
 
-    .history-badge {
-      font-size: 10px;
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #c7b197;
+        color: #6b553b;
+      }
 
-    /* 설치 안내 바 */
-    .install-bar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 8px 24px;
-      font-size: 12px;
-      background: #f0e4d4;
-      border-top: 1px solid var(--border-soft);
-      border-bottom: 1px solid var(--border-soft);
-      color: var(--text-soft);
-    }
-    .install-bar span {
-      flex: 1;
-    }
-  </style>
-</head>
-<body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div class="app-title-block">
-        <div class="app-title">Aroma el lagom dives 상담차트</div>
-        <div class="app-subtitle">
-          오행·체질·호르몬·로블코코/엘라곰 제품·시술권·예약까지 한 번에 정리되는 1:1 프라이빗 상담 프로그램
+      .btn-sub {
+        background: #f1e4d4;
+        color: #5a4130;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #241c18, #3f2e21);
+      }
+
+      .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.65);
+      }
+
+      .btn-sub:hover {
+        background: #e8d4be;
+      }
+
+      .eo-section-title {
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin: 6px 0 2px;
+        color: #5b4833;
+      }
+
+      .eo-card {
+        border-radius: 10px;
+        border: 1px solid #e2d2bc;
+        background: #fbf5ec;
+        padding: 6px 7px;
+        margin-bottom: 4px;
+      }
+
+      .eo-name {
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .eo-line {
+        font-size: 0.74rem;
+        color: #836c4f;
+      }
+
+      .eo-line.caution {
+        color: #b0523b;
+      }
+
+      .small-muted {
+        font-size: 0.72rem;
+        color: #a08c6c;
+      }
+
+      .report-box {
+        border-radius: 10px;
+        border: 1px solid #e2d2bd;
+        background: #fbf5ec;
+        padding: 8px 9px;
+        font-size: 0.78rem;
+        min-height: 180px;
+        white-space: pre-wrap;
+      }
+
+      .photo-compare {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+
+      .photo-column {
+        flex: 1 1 160px;
+        min-width: 0;
+      }
+
+      .photo-preview {
+        margin-top: 4px;
+        border-radius: 10px;
+        border: 1px solid #e3d6c5;
+        background: #fbf5ec;
+        padding: 6px;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.78rem;
+        color: #a8926b;
+        text-align: center;
+      }
+
+      .photo-preview img {
+        max-width: 100%;
+        max-height: 220px;
+        border-radius: 8px;
+        object-fit: cover;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-shell">
+      <div class="app-title">Client Care Chart</div>
+      <div class="app-subtitle">
+        Aroma el lagom dives · 1:1 Private Aromatherapy &amp; Bamboo Therapy
+      </div>
+
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <div class="brand-badge">AROMA EL LAGOM DIVES</div>
+          <div class="today-chip">
+            오늘 상담일자 :
+            <span id="todayDisplay">0000-00-00</span>
+          </div>
+        </div>
+        <div class="top-bar-right">
+          <span class="pill">PC · 모바일 동시 사용</span>
+          <span class="pill">Firebase Sync</span>
+          <span class="pill">로블코코 · 엘라곰 제품 연동</span>
         </div>
       </div>
-      <div class="badge">ROBLE COCO · PRIVATE THERAPY</div>
-    </header>
 
-    <!-- 설치 안내 바 (PWA 설치 가능할 때만 표시) -->
-    <div class="install-bar" id="installBar">
-      <span>이 상담차트를 기기에 설치해서 앱처럼 사용해 보세요.</span>
-      <button class="btn-secondary" id="installBtn">앱으로 설치</button>
+      <div class="layout">
+        <!-- LEFT COLUMN -->
+        <div>
+          <!-- 01. CLIENT PROFILE -->
+          <div class="card">
+            <div class="card-header-row">
+              <div>
+                <div class="card-title">01. CLIENT PROFILE</div>
+                <div class="card-caption">
+                  고객 기본 정보 · 체질 · 주의사항 · 오늘 컨디션
+                </div>
+              </div>
+              <div class="button-row">
+                <input
+                  id="searchKeyword"
+                  type="text"
+                  placeholder="이름 또는 연락처 검색"
+                  style="min-width: 140px"
+                />
+                <button class="btn btn-outline" onclick="searchClient()">
+                  고객 검색
+                </button>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label">고객 이름 *</label>
+                <input
+                  id="clientName"
+                  type="text"
+                  placeholder="예) 홍길동"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="field">
+                <label class="field-label">연락처(핸드폰) *</label>
+                <input
+                  id="clientPhone"
+                  type="tel"
+                  placeholder="예) 010-0000-0000"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label">연령대</label>
+                <select id="ageRangeSelect">
+                  <option value="">선택</option>
+                  <option value="20대">20대</option>
+                  <option value="30대">30대</option>
+                  <option value="40대">40대</option>
+                  <option value="50대">50대</option>
+                  <option value="60대 이상">60대 이상</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label">체질 · 특이사항</label>
+                <input
+                  id="clientConstitution"
+                  type="text"
+                  placeholder="냉/열체질, 위염, 두통, 과민성대장 등"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">CLIENT NOTE</label>
+              <textarea
+                id="clientNote"
+                placeholder="예) 48세 여성, 수족냉증·완경 시작, 수면 불규칙, 복부·하체 비만, 저혈압, 알러지약 복용 중 등"
+              ></textarea>
+            </div>
+
+            <hr class="divider" />
+
+            <div class="section-title">
+              주의해야 할 상황 · Contra-indication
+            </div>
+            <div id="safetyTags" class="tag-group">
+              <label class="tag negative">
+                <input type="checkbox" value="임신 가능성/임산부" />
+                임신 가능성/임산부
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="수유 중" />
+                수유 중
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="고혈압" />
+                고혈압
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="저혈압" />
+                저혈압
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="혈전/심혈관 질환" />
+                혈전/심혈관 질환
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="간/신장 질환" />
+                간/신장 질환
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="갑상선 질환" />
+                갑상선 질환
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="항우울제/수면제 복용" />
+                항우울제/수면제 복용
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="피부 알러지/민감성" />
+                피부 알러지/민감성
+              </label>
+              <label class="tag negative">
+                <input type="checkbox" value="암/항암 치료 중/후" />
+                암/항암 치료 중/후
+              </label>
+            </div>
+
+            <div class="hint-box">
+              <strong>주의 체크는 EO 선택 안전 가이드에 함께 반영</strong
+              >됩니다. 실제 사용 여부·농도는 반드시 원장님이 최종 판단합니다.
+            </div>
+
+            <hr class="divider" />
+
+            <div class="section-title">
+              오늘 방문 목적 · 주요 컨디션 · 증상 선택
+            </div>
+
+            <div class="field">
+              <label class="field-label">방문 목적 / 오늘 컨디션 메모</label>
+              <textarea
+                id="visitReason"
+                placeholder="예) 골반통 + 생리 전 부종, 3일째 불면, 업무 스트레스로 어깨·목 결림, 소화불량 등"
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label class="field-label">오늘 주요 증상 선택 (복수 선택 가능)</label>
+              <div id="symptomTags" class="tag-group">
+                <label class="tag positive">
+                  <input type="checkbox" value="pain" />
+                  근육통/결림/요통
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="edema" />
+                  부종/림프정체
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="fatigue" />
+                  피로/무기력
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="stress" />
+                  스트레스/불안
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="sleep" />
+                  수면장애/불면
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="digest" />
+                  소화불량/위장
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="hormone" />
+                  호르몬(PMS/갱년기)
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="skin" />
+                  피부트러블/민감
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="brain" />
+                  두통/집중저하/브레인
+                </label>
+                <label class="tag positive">
+                  <input type="checkbox" value="postpartum" />
+                  산후관리/골반·허리
+                </label>
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button class="btn btn-sub" onclick="renderEoRecommendations()">
+                증상 기반 EO 추천 보기
+              </button>
+            </div>
+          </div>
+
+          <!-- 02. CARE PROGRAM · PACKAGE -->
+          <div class="card">
+            <div class="card-header-row">
+              <div>
+                <div class="card-title">02. CARE PROGRAM · PACKAGE</div>
+                <div class="card-caption">
+                  관리 프로그램 선택 · 회차권/금액권 관리 · 다음 방문 추천
+                </div>
+              </div>
+              <div class="inline-note">
+                프로그램은 Firestore
+                <strong>config_programs</strong> 컬렉션에서 관리합니다.
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">관리 프로그램 선택 *</label>
+              <select id="programSelect">
+                <option value="">프로그램 선택</option>
+              </select>
+              <div class="inline-note">
+                선택한 프로그램에 따라 기본 정가, 기준 회차 수, 권장 간격이
+                불러와집니다.
+              </div>
+            </div>
+
+            <div class="small-row">
+              <span class="field-label small">프로그램 상태</span>
+              <span id="programStatus" class="muted" style="font-size: 0.72rem"
+                >선택 전</span
+              >
+            </div>
+
+            <hr class="divider" />
+
+            <div class="section-title">프로그램 금액 (총 정가 / 실제 결제)</div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label">프로그램 정가 (총 정가 기준)</label>
+                <input
+                  id="programBasePrice"
+                  type="number"
+                  placeholder="예) 1800000"
+                />
+                <div id="packageListPriceDisplay" class="field-note">
+                  예: 180,000원 × 10회 = 1,800,000원 (정가 기준)
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">실제 결제 금액 (할인 적용 후)</label>
+                <input
+                  id="programFinalPrice"
+                  type="number"
+                  placeholder="예) 1500000"
+                />
+                <div class="field-note">
+                  고객이 실제로 결제한 총 금액 (할인/서비스 반영)
+                </div>
+              </div>
+            </div>
+
+            <div class="hint-box">
+              <strong>프로그램 정가</strong>는 가격표 기준 총 정가,
+              <strong>실제 결제 금액</strong>은 고객이 실제 결제한 금액입니다.
+              회차권/금액권 계산에는 실제 결제 금액을 기준으로 관리합니다.
+            </div>
+
+            <hr class="divider" />
+
+            <div class="section-title">권종 유형</div>
+            <div class="small-row">
+              <span class="field-label small">권종 선택</span>
+              <div class="tag-group">
+                <label class="tag">
+                  <input
+                    type="radio"
+                    name="programType"
+                    value="sessions"
+                    checked
+                  />
+                  회차권 (횟수 차감)
+                </label>
+                <label class="tag">
+                  <input type="radio" name="programType" value="amount" />
+                  금액권 / 회원권 (잔액 차감)
+                </label>
+              </div>
+            </div>
+
+            <!-- 회차권 -->
+            <div id="sessionPackageBox">
+              <div class="section-title">회차권 설정</div>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">1회 정가</label>
+                  <input
+                    id="sessionUnitPrice"
+                    type="number"
+                    placeholder="예) 180000"
+                  />
+                  <div id="packageListPriceDisplay" class="field-note">
+                    예: 180,000원 × 10회 = 1,800,000원 (정가 기준)
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="field-label">총 횟수</label>
+                  <input
+                    id="totalSessionsInput"
+                    type="number"
+                    placeholder="예) 10"
+                  />
+                  <div class="field-note">
+                    프로그램 구매 시 총 관리 횟수 (예: 10회, 20회 등)
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">사용 횟수 (오늘 방문 전까지)</label>
+                  <input
+                    id="usedSessionsInput"
+                    type="number"
+                    placeholder="예) 1"
+                  />
+                </div>
+                <div class="field">
+                  <label class="field-label">남은 횟수 / 다음 방문 추천일</label>
+                  <div class="muted" id="remainingSessionsDisplay">-</div>
+                  <div class="muted">
+                    다음 권장일 :
+                    <span id="nextAppointmentDisplay">-</span>
+                  </div>
+                  <div class="field-note">
+                    프로그램 intervalDays 기준으로 자동 계산됩니다.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 금액권/회원권 -->
+            <div id="membershipBox" style="display: none; margin-top: 8px">
+              <div class="section-title">금액권 / 회원권 관리</div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">회원권 총 금액</label>
+                  <input
+                    id="membershipTotalAmount"
+                    type="number"
+                    placeholder="예) 1000000"
+                  />
+                  <div class="field-note">
+                    예: 연 회원권 1,000,000원 / 월 정액 회원권 등
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="field-label">이번 방문 사용 금액</label>
+                  <input
+                    id="membershipUseToday"
+                    type="number"
+                    placeholder="예) 150000"
+                  />
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">이전 방문까지 잔액</label>
+                  <div
+                    id="membershipPrevBalanceDisplay"
+                    class="muted"
+                    data-value=""
+                  >
+                    -
+                  </div>
+                  <div class="field-note">
+                    이전 세션 잔액이 자동 불러와집니다. 없으면 총 금액에서
+                    계산합니다.
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="field-label">이번 방문 후 예상 잔액</label>
+                  <div id="membershipNewBalanceDisplay" class="muted">-</div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">회원권 관리 기한 (만료일)</label>
+                  <input id="membershipExpireDate" type="date" />
+                </div>
+                <div class="field">
+                  <label class="field-label">관리 기한 연장 메모</label>
+                  <input
+                    id="membershipExtendNote"
+                    type="text"
+                    placeholder="예) 1개월 연장, 출산 후 복귀까지 보류 등"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="hint-box">
+              회차권은 <strong>“횟수”</strong>, 회원권은
+              <strong>“잔액”</strong> 기준으로 관리합니다. 한 고객이 두 가지를
+              동시에 가지고 있어도, 오늘 어떤 기준으로 사용했는지만 정확히
+              기록하면 됩니다.
+            </div>
+          </div>
+
+          <!-- 03. TODAY SESSION · RECIPE -->
+          <div class="card">
+            <div class="card-header-row">
+              <div>
+                <div class="card-title">03. TODAY SESSION · RECIPE</div>
+                <div class="card-caption">
+                  오늘 실제 시술 내용 · EO 실전 레시피(원장 판단) · 다음 계획
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">오늘 실제 시술 내용 / 부위</label>
+              <textarea
+                id="sessionTechniques"
+                placeholder="예) 온열뱀부 전신 (복부+골반+하체 집중), 림프드레나지, 복부 온찜, 두피·측두부 브레인 테라피 등"
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label class="field-label"
+                >오늘 사용한 제품 (로블코코 / 엘라곰 / 기타)</label
+              >
+              <textarea
+                id="sessionProducts"
+                placeholder="예) 로블코코 궁 오일 + 커피&amp;씨솔트 슬림스크럽 + 엘라곰 시그니처 바디오일, 홈케어용 로블코코 Y존 궁 제품 추천 등"
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label class="field-label">EO 실전 레시피 (원장 전용 메모)</label>
+              <textarea
+                id="eoRecipeNote"
+                placeholder="예) 마조람 3g + 제라늄 2g + 라벤더 3g / 호호바 100ml 기준 8% 등. 고객 체질·질환·복용약 고려해 매 방문마다 조정."
+              ></textarea>
+              <div class="field-note">
+                여기에는 실제 블렌딩 비율을 기록합니다. 자동 추천은 참고용이며,
+                최종 레시피는 원장님 판단으로만 결정하는 영역입니다.
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">다음 회차 계획 · 홈케어 안내</label>
+              <textarea
+                id="sessionNextPlan"
+                placeholder="예) 1주 간격 3회 추가 권장, 온열뱀부 골반 집중 + 림프 케어, 집에서는 궁 좌훈 + 아로마 솔트 반신욕 주 3회, 카페인·야식 줄이기 등"
+              ></textarea>
+            </div>
+
+            <div class="button-row">
+              <button class="btn btn-outline" onclick="generateReportPreview()">
+                자동 상담 리포트 미리보기
+              </button>
+              <button class="btn btn-outline" onclick="generateSummaryReport()">
+                누적 상담 리포트 생성
+              </button>
+              <button class="btn btn-primary" onclick="saveSession()">
+                오늘 상담 내용 저장
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+          <!-- EO GUIDE -->
+          <div class="card">
+            <div class="card-header-row">
+              <div>
+                <div class="card-title">SYMPTOM-BASED EO GUIDE</div>
+                <div class="card-caption">
+                  증상·주의사항에 맞춘 EO 효능 · 희석 · 주의점 안내
+                </div>
+              </div>
+            </div>
+
+            <div class="section-title">1) 증상 기반 EO 추천</div>
+            <div id="eoRecommendations" class="muted">
+              증상을 선택한 뒤 왼쪽의
+              <strong>“증상 기반 EO 추천 보기”</strong> 버튼을 눌러주세요.
+              각 EO마다 효능·희석·주의점이 함께 표시됩니다.
+            </div>
+
+            <hr class="divider" />
+
+            <div class="section-title">2) 프로그램별 EO · 제품 추천</div>
+            <div id="programProductRecommendations" class="muted">
+              관리 프로그램을 선택하면, 해당 프로그램에 최적화된 EO 세트와
+              로블코코/엘라곰 제품 추천 리스트가 표시됩니다.
+            </div>
+          </div>
+
+          <!-- REPORT & PHOTOS -->
+          <div class="card" style="margin-top: 10px">
+            <div class="card-header-row">
+              <div>
+                <div class="card-title">자동 상담 리포트 · BEFORE/AFTER</div>
+                <div class="card-caption">
+                  고객 설명용 리포트 + 세션별 전후 사진 기록
+                </div>
+              </div>
+              <div class="button-row">
+                <button class="btn btn-outline" onclick="downloadReportPdf()">
+                  리포트 PDF 다운로드
+                </button>
+              </div>
+            </div>
+
+            <div class="section-title">자동 상담 리포트</div>
+            <div id="autoReport" class="report-box">
+아직 리포트가 생성되지 않았습니다.
+왼쪽 정보를 입력한 후 “자동 상담 리포트 미리보기” 버튼을 눌러주세요.
+            </div>
+
+            <hr class="divider" />
+
+            <div class="section-title">
+              전후 사진 비교
+              <span
+                style="font-size: 0.7rem; font-weight: 400; margin-left: 4px"
+              >
+                (선택 사항 · 세션별 Before / After 저장)
+              </span>
+            </div>
+            <div class="photo-compare">
+              <div class="photo-column">
+                <div class="field-label small">Before 사진</div>
+                <input type="file" id="beforePhotoInput" accept="image/*" />
+                <div class="photo-preview" id="beforePhotoPreview">
+                  전후 비교를 위해 Before 사진을 업로드해 주세요.
+                </div>
+              </div>
+              <div class="photo-column">
+                <div class="field-label small">After 사진</div>
+                <input type="file" id="afterPhotoInput" accept="image/*" />
+                <div class="photo-preview" id="afterPhotoPreview">
+                  관리 후 After 사진을 업로드해 주세요.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /layout -->
     </div>
-
-    <main class="app-main">
-      <!-- 입력 패널 -->
-      <section class="panel panel-left">
-        <div class="panel-title">고객 상태 입력</div>
-
-        <!-- 고객 검색 -->
-        <div class="field-group">
-          <div class="label">CLIENT SEARCH</div>
-          <div class="search-row">
-            <input id="searchName" type="text" placeholder="이름으로 이전 상담 내역 불러오기" />
-            <button class="btn-secondary" id="loadBtn">불러오기</button>
-          </div>
-          <div class="hint">
-            이전에 저장한 고객이라면 이름만 입력 후 [불러오기]를 누르면  
-            상담 히스토리, 시술권, 홈케어 제품, 예약 스케줄을 함께 확인할 수 있습니다.
-          </div>
-        </div>
-
-        <!-- 고객 기본 정보 -->
-        <div class="field-group">
-          <div class="label">CLIENT PROFILE</div>
-          <div class="grid-2">
-            <div>
-              <div class="field-label">이름</div>
-              <input id="clientName" type="text" placeholder="고객 이름" />
-            </div>
-            <div>
-              <div class="field-label">전화번호</div>
-              <input id="clientPhone" type="text" placeholder="010-0000-0000" />
-            </div>
-          </div>
-          <div class="grid-2" style="margin-top: 8px;">
-            <div>
-              <div class="field-label">생년월일</div>
-              <input id="clientBirth" type="date" />
-            </div>
-            <div>
-              <div class="field-label">성별</div>
-              <select id="clientGender">
-                <option value="">선택</option>
-                <option value="female">여성</option>
-                <option value="male">남성</option>
-                <option value="other">기타</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- 상담 서술 -->
-        <div class="field-group">
-          <div class="label">CLIENT NOTE</div>
-          <textarea id="clientInput" placeholder="예) 48세 여성. 수족냉증 심하고 완경이 시작됨. 수면이 불규칙하고 자주 깨며, 식사시간이 들쭉날쭉하고 가끔 변비. 복부 비만과 하체비만, 저혈압, 알러지 약 복용 중. 감정기복 심하고 우울감 잦음."></textarea>
-          <div class="hint">
-            신상정보를 입력한 뒤, 현재 증상·감정·생활습관을 자유롭게 서술하세요.  
-            [상담 리포트 생성 및 저장]을 누르면 이 방문이 하나의 히스토리(날짜)로 기록됩니다.
-          </div>
-        </div>
-
-        <!-- 이번 방문: 시술권 사용/이벤트 -->
-        <div class="field-group">
-          <div class="label">THIS SESSION · COURSE USE</div>
-          <div class="product-row">
-            <select id="sessionCourse">
-              <option value="">이번 방문에 해당 관리 프로그램 선택 (선택사항)</option>
-            </select>
-            <input id="sessionUsedCount" type="number" min="0" step="1" placeholder="사용 회차 (기본 1)" />
-          </div>
-          <textarea id="sessionEventNote" class="product-note" placeholder="이벤트/증정 내용, 서비스, 사은품 등 기록 (선택)"></textarea>
-          <div class="hint">
-            관리 프로그램을 사용한 방문이라면, 사용한 회차와 이벤트/증정 내용을 기록해 두면  
-            패키지 관리와 고객 케어 히스토리가 훨씬 선명해집니다.
-          </div>
-        </div>
-
-        <!-- 관리 프로그램 / 시술권 등록 -->
-        <div class="field-group">
-          <div class="label">CARE PROGRAM 등록</div>
-
-          <div class="grid-2">
-            <div>
-              <div class="field-label">관리 프로그램명</div>
-              <input id="courseName" type="text" placeholder="예: 온열뱀부 바디 10회 프로그램" />
-            </div>
-            <div>
-              <div class="field-label">관리 횟수</div>
-              <input id="courseTotal" type="number" min="1" step="1" placeholder="예: 10" />
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-top: 8px;">
-            <div>
-              <div class="field-label">결제 금액</div>
-              <input id="coursePrice" type="text" placeholder="예: 1,200,000" />
-            </div>
-            <div>
-              <div class="field-label">관리 기간</div>
-              <select id="coursePeriod">
-                <option value="">선택</option>
-                <option value="3개월">3개월</option>
-                <option value="6개월">6개월</option>
-                <option value="9개월">9개월</option>
-                <option value="12개월">12개월</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-top: 8px;">
-            <div>
-              <div class="field-label">관리 연장 기한</div>
-              <input id="courseExtend" type="text" placeholder="예: 1개월 / 2개월 / 개별 협의" />
-            </div>
-            <div></div>
-          </div>
-
-          <textarea id="courseMemo" class="product-note" placeholder="결제 방식, 유의사항, 이벤트 조건 등 메모 (선택)"></textarea>
-
-          <button class="btn-secondary" id="addCourseBtn" style="margin-top: 8px;">관리 프로그램 등록</button>
-
-          <div class="hint">
-            관리 프로그램명·결제금액·관리횟수·관리기간(3/6/9/12개월)·연장기한을 함께 등록해 두면  
-            회차·기간·연장 조건을 한 번에 관리할 수 있습니다.
-          </div>
-        </div>
-
-        <!-- 홈케어 제품 기록 -->
-        <div class="field-group">
-          <div class="label">HOMECARE PRODUCTS</div>
-          <div class="product-row">
-            <select id="productCategory">
-              <option value="">카테고리</option>
-              <option value="roble-gung">로블코코 GUNG(궁)</option>
-              <option value="roble-balm">로블코코 BALM</option>
-              <option value="roble-home">로블코코 HOME CARE</option>
-              <option value="roble-spa">로블코코 SPA</option>
-              <option value="roble-backtick">로블코코 아로마백틱</option>
-              <option value="roble-blend">로블코코 Blending E.O.</option>
-              <option value="bamboo-life">로블코코 Bamboo Life</option>
-              <option value="roble-etc">로블코코 기타</option>
-              <option value="ellagom">엘라곰</option>
-              <option value="verber">베르베르</option>
-              <option value="other">기타/맞춤</option>
-            </select>
-            <input id="productName" type="text" placeholder="제품명 (예: 인동궁, 인황궁, 슬림 바디오일 등 실제 이름)" />
-            <button class="btn-secondary" id="addProductBtn">제품 추가</button>
-          </div>
-          <textarea id="productNote" class="product-note" placeholder="제품 용도, 사용 부위, 사용법 등 간단 메모 (예: 하체 림프용, 밤마다 종아리·허벅지 위주 사용)"></textarea>
-          <div class="hint">
-            고객이 홈케어용으로 구매한 제품을 기록해 두면,  
-            다음 내방 시 어떤 제품을 어떻게 사용 중인지 바로 확인할 수 있습니다.
-          </div>
-        </div>
-
-        <!-- 예약 스케줄 등록 + 테라피·홈케어 기록 -->
-        <div class="field-group">
-          <div class="label">APPOINTMENT / RESERVATION</div>
-          <div class="product-row">
-            <input id="appointmentDateTime" type="datetime-local" />
-            <button class="btn-secondary" id="addAppointmentBtn">예약 추가</button>
-          </div>
-          <textarea id="appointmentMemo" class="product-note" placeholder="예약 메뉴, 메모, 유연한 시간대 등 (선택)"></textarea>
-          <div class="hint">
-            다음 예약 일정을 기록해두면, 고객별 예약 가능 스케줄을 한 눈에 확인할 수 있습니다.
-          </div>
-
-          <div class="label" style="margin-top: 10px;">SESSION NOTE · 예약별 테라피 / 홈케어 기록</div>
-          <div class="product-row">
-            <select id="appointmentSelectForNote">
-              <option value="">테라피 내용을 기록할 예약 선택</option>
-            </select>
-          </div>
-          <textarea id="therapyNote" class="product-note" placeholder="해당 예약에서 진행한 테라피 내용, 테크닉, 반응 등을 기록하세요."></textarea>
-          <textarea id="homecareOilNote" class="product-note" placeholder="이 방문에서 추천한 홈케어 아로마오일·로블코코/엘라곰/베르베르 제품·사용법 등을 기록하세요."></textarea>
-          <button class="btn-secondary" id="saveAppointmentNoteBtn" style="margin-top: 8px;">예약별 테라피·홈케어 기록 저장</button>
-          <div class="hint">
-            예약 날짜를 선택한 뒤, 그 날 진행한 테라피 내용과 집에서 사용할 수 있는 아로마오일/제품 추천을 함께 기록해 두면  
-            다음 방문 시 케어 연속성과 홈케어 진행 여부를 쉽게 확인할 수 있습니다.
-          </div>
-        </div>
-
-        <div class="controls">
-          <button class="btn-primary" id="analyzeBtn">
-            <span>상담 리포트 생성 및 저장</span>
-          </button>
-
-          <button class="btn-secondary" id="clearBtn">
-            새 상담 시작 (초기화)
-          </button>
-        </div>
-
-        <div class="meta-line">
-          <div class="meta-pill">이 기기 안에서만 자동 저장 (localStorage)</div>
-          <div class="meta-pill">이름으로 상담·관리 프로그램·제품·예약 히스토리 조회</div>
-        </div>
-      </section>
-
-      <!-- 결과 패널 -->
-      <section class="panel panel-right">
-        <div class="panel-title">자동 상담 리포트</div>
-        <div id="resultContainer">
-          <div class="result-section">
-            <div class="result-body">
-              왼쪽에 고객 정보를 입력하고 상담 내용, 관리 프로그램 사용, 홈케어 제품, 예약 일정을 기록한 뒤  
-              [상담 리포트 생성 및 저장]이나 각 추가 버튼을 누르면,  
-              방문 날짜별 상담 기록과 관리 프로그램·홈케어·예약 정보,  
-              그리고 로블코코/엘라곰/베르베르 제품 운용까지 한 번에 확인할 수 있습니다.
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div>※ 이 도구는 실제 의료 행위가 아닌, 아로마·테라피 상담용 참고 도구입니다.</div>
-      <div>ⓒ Aroma el lagom dives · Roble CoCo · Private Use</div>
-    </footer>
-  </div>
-
-  <script>
-    const inputEl = document.getElementById("clientInput");
-    const nameEl = document.getElementById("clientName");
-    const phoneEl = document.getElementById("clientPhone");
-    const birthEl = document.getElementById("clientBirth");
-    const genderEl = document.getElementById("clientGender");
-    const searchNameEl = document.getElementById("searchName");
-
-    const sessionCourseEl = document.getElementById("sessionCourse");
-    const sessionUsedCountEl = document.getElementById("sessionUsedCount");
-    const sessionEventEl = document.getElementById("sessionEventNote");
-
-    const courseNameEl = document.getElementById("courseName");
-    const courseTotalEl = document.getElementById("courseTotal");
-    const coursePriceEl = document.getElementById("coursePrice");
-    const coursePeriodEl = document.getElementById("coursePeriod");
-    const courseExtendEl = document.getElementById("courseExtend");
-    const courseMemoEl = document.getElementById("courseMemo");
-
-    const productCategoryEl = document.getElementById("productCategory");
-    const productNameEl = document.getElementById("productName");
-    const productNoteEl = document.getElementById("productNote");
-
-    const appointmentDateTimeEl = document.getElementById("appointmentDateTime");
-    const appointmentMemoEl = document.getElementById("appointmentMemo");
-    const appointmentSelectForNoteEl = document.getElementById("appointmentSelectForNote");
-    const therapyNoteEl = document.getElementById("therapyNote");
-    const homecareOilNoteEl = document.getElementById("homecareOilNote");
-
-    const analyzeBtn = document.getElementById("analyzeBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const loadBtn = document.getElementById("loadBtn");
-    const addProductBtn = document.getElementById("addProductBtn");
-    const addCourseBtn = document.getElementById("addCourseBtn");
-    const addAppointmentBtn = document.getElementById("addAppointmentBtn");
-    const saveAppointmentNoteBtn = document.getElementById("saveAppointmentNoteBtn");
-    const resultContainer = document.getElementById("resultContainer");
-
-    const installBar = document.getElementById("installBar");
-    const installBtn = document.getElementById("installBtn");
-
-    const STORAGE_KEY = "aroma-consult-clients-v1";
-    let currentClientId = null;
-    let currentHistoryIndex = null;
-
-    let deferredPrompt = null;
-
-    const CATEGORY_LABELS = {
-      "roble-gung": "로블코코 GUNG(궁)",
-      "roble-balm": "로블코코 BALM",
-      "roble-home": "로블코코 HOME CARE",
-      "roble-spa": "로블코코 SPA",
-      "roble-backtick": "로블코코 아로마백틱",
-      "roble-blend": "로블코코 Blending E.O.",
-      "bamboo-life": "로블코코 Bamboo Life",
-      "roble-etc": "로블코코 기타",
-      "ellagom": "엘라곰",
-      "verber": "베르베르",
-      "other": "기타/맞춤",
-      "": "기타/미분류"
-    };
-
-    function getDateLabel() {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      const h = String(d.getHours()).padStart(2, "0");
-      const mi = String(d.getMinutes()).padStart(2, "0");
-      return `${y}-${m}-${day} ${h}:${mi}`;
-    }
-
-    function formatBirth(birth) {
-      if (!birth) return "-";
-      return birth.replace(/-/g, ".");
-    }
-
-    function genderLabel(val) {
-      if (val === "female") return "여성";
-      if (val === "male") return "남성";
-      if (val === "other") return "기타";
-      return "-";
-    }
-
-    function loadClients() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return {};
-        const parsed = JSON.parse(raw);
-        if (typeof parsed !== "object" || parsed === null) return {};
-        return parsed;
-      } catch {
-        return {};
-      }
-    }
-
-    function saveClients(data) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      } catch (e) {
-        console.warn("저장 오류", e);
-      }
-    }
-
-    function makeClientId(name, phone) {
-      const n = (name || "").trim();
-      const p = (phone || "").trim();
-      return `${n}||${p}`;
-    }
-
-    // ===== 분석 엔진 =====
-    function analyzeText(rawText, meta) {
-      const textOriginal = (rawText || "").trim();
-      let text = textOriginal;
-      if (meta && meta.gender === "female") text = "여성 " + text;
-      if (meta && meta.gender === "male") text = "남성 " + text;
-
-      const hasCold = /수족냉|손발이 차|냉증|차가움/.test(text);
-      const hasHeat = /열감|상열|열이 많/.test(text);
-      const hasEdema = /부종|붓기|붓는/.test(text);
-      const hasLowerBody = /하체비만|허벅지|종아리|다리/.test(text);
-      const hasAbdFat = /복부비만|뱃살|복부에 살/.test(text);
-      const hasInsomnia = /불면|잠이 안 오|수면패턴|자주 깨|잠을 잘 못|깊게 못 자/.test(text);
-      const hasConstipation = /변비|딱딱한 변/.test(text);
-      const hasDiarrhea = /설사|무른 변/.test(text);
-      const hasStress = /스트레스|긴장|예민/.test(text);
-      const hasDepress = /우울|무기력|허무|마음이 가라앉/.test(text);
-      const hasAnxious = /불안|초조/.test(text);
-      const hasMenstruation = /생리통|생리전|pms|월경/.test(text);
-      const hasMenopause = /완경|폐경|갱년기/.test(text);
-      const hasHypotension = /저혈압/.test(text);
-      const hasHypertension = /고혈압/.test(text);
-      const hasIrregularMeal = /식사량|식사시간|불규칙|끼니를 거르/.test(text);
-      const hasAllergyMed = /알러지 약|알레르기 약|항히스타민/.test(text);
-
-      let patternLines = [];
-
-      if (hasCold || hasHypotension) {
-        patternLines.push(
-          "- 전반적으로 **수(水)/한(寒) 경향이 강하고 화(火)의 기운이 부족한 패턴**입니다.\n" +
-          "  수족냉증·저혈압·피로감은 기혈순환과 대사가 모두 떨어져 있다는 신호로 볼 수 있습니다."
-        );
-      }
-      if (hasHeat) {
-        patternLines.push(
-          "- 상체 열감이나 안면 홍조가 있다면 **상열하한(上熱下寒) 패턴**을 함께 의심할 수 있습니다."
-        );
-      }
-      if (hasInsomnia || hasStress || hasDepress || hasAnxious) {
-        patternLines.push(
-          "- 수면 장애와 감정 기복, 우울·불안감은 **간(목)·심(火)의 자율신경 밸런스가 무너진 상태**를 의미합니다."
-        );
-      }
-      if (hasIrregularMeal || hasConstipation || hasDiarrhea || hasAbdFat) {
-        patternLines.push(
-          "- 식사 시간·량이 불규칙하고 장 기능에 문제가 있다면 **비·위(토)의 기운이 약해진 상태**로,\n" +
-          "  복부비만·변비·체력 저하와 연결됩니다."
-        );
-      }
-      if (hasLowerBody || hasEdema) {
-        patternLines.push(
-          "- 하체비만·다리 부종은 **하초의 냉·습과 림프 정체**가 중심에 있는 패턴입니다."
-        );
-      }
-      if (!patternLines.length) {
-        patternLines.push(
-          "- 현재 내용으로 보았을 때, 기혈순환·소화·수면·정서 상태를 함께 관리해야 하는 **복합 체질 패턴**으로 해석됩니다."
-        );
-      }
-      const patternText = patternLines.join("\n\n");
-
-      let causeLines = [];
-
-      if (hasMenopause) {
-        causeLines.push(
-          "- 완경/갱년기 시기의 급격한 호르몬 변화로 인해 자율신경이 쉽게 흔들리며,\n" +
-          "  수면·체온조절·기분·체형변화(특히 복부·하체 중심)가 동시에 나타나기 쉽습니다."
-        );
-      }
-      if (hasInsomnia) {
-        causeLines.push(
-          "- 깊은 수면이 유지되지 않는 패턴은 **교감신경 과항진 + 심리적 긴장 상태**를 의미하며,\n" +
-          "  회복·재생 시간이 부족해져 피로·우울감을 악화시킬 수 있습니다."
-        );
-      }
-      if (hasIrregularMeal) {
-        causeLines.push(
-          "- 식사량·시간의 불규칙함은 비위 기능 저하를 만들고, 혈당 변동과 함께\n" +
-          "  에너지 저하·복부비만·장 트러블로 이어집니다."
-        );
-      }
-      if (hasConstipation) {
-        causeLines.push(
-          "- 변비는 장 내 노폐물·독소 정체를 의미하며, 피부·기분·호르몬 균형에도 부담을 줄 수 있습니다."
-        );
-      }
-      if (hasStress || hasDepress || hasAnxious) {
-        causeLines.push(
-          "- 지속적인 스트레스·우울·불안은 간기울결(氣가 막힌 상태)을 만들고,\n" +
-          "  목·어깨·두통·수면장애로 이어지기 쉽습니다."
-        );
-      }
-      if (hasAllergyMed) {
-        causeLines.push(
-          "- 알레르기 약(항히스타민) 복용은 증상 조절에는 도움을 주지만,\n" +
-          "  피로·구갈·무기력감을 동반할 수 있어 순환·해독 케어를 같이 해 주는 것이 좋습니다."
-        );
-      }
-      if (!causeLines.length) {
-        causeLines.push(
-          "- 생활 리듬의 불규칙함, 순환 저하, 정서적 스트레스가 복합적으로 작용하는 패턴으로 보입니다."
-        );
-      }
-      const causeText = causeLines.join("\n\n");
-
-      let aromaSections = [];
-      aromaSections.push("● 기본 방향");
-      aromaSections.push(
-        "- **신경 안정 + 호르몬 밸런스 + 온열·순환 + 장·림프 해독**을 동시에 잡는 방향으로 설계합니다.\n" +
-        "- 샵에서는 온열뱀부와 바디오일을 활용해 심부 순환·림프를 열어주고,\n" +
-        "  집에서는 바디오일·입욕솔트·롤온 등을 사용해 관리기간 내내 흐름을 유지하도록 안내합니다."
-      );
-
-      aromaSections.push("");
-      aromaSections.push("● 증상별 추천 에센셜오일 (Ellagom EO 기준 예시)");
-
-      if (hasInsomnia || hasStress || hasAnxious || hasDepress) {
-        aromaSections.push("");
-        aromaSections.push("① 수면·신경 안정 / 불안·우울감");
-        aromaSections.push(
-          "- 스위트 마조람 EO: 불안·초조 완화, 심박 진정, 깊은 수면 유도\n" +
-          "- 라벤더 EO(안전 농도): 전반적인 긴장 완화, 두통·근육 긴장 완화\n" +
-          "- 프랑킨센스 EO: 깊은 호흡, 명상 상태 유도, 마음을 가라앉히는 데 도움\n" +
-          "- 베티버 EO: 깊고 무거운 안정감, 과도한 생각·과각성 완화 (저녁·수면 전 소량 권장)\n" +
-          "- 로만 캐모마일 EO(보유 시): 예민한 신경·불안·안정되지 않는 수면에 부드럽게 사용\n" +
-          "- 네롤리/오렌지 플라워 계열 EO(보유 시): 심리적 위축·우울감 완화\n" +
-          "- 일랑일랑 EO 사용 시: 혈압이 너무 낮은 경우 과도 사용 주의, 소량만 블렌딩"
-        );
-      }
-
-      if (hasCold || hasHypotension || hasLowerBody || hasEdema || hasAbdFat) {
-        aromaSections.push("");
-        aromaSections.push("② 순환 저하 / 수족냉증 / 하체비만·부종");
-        aromaSections.push(
-          "- 진저(생강) EO: 중심 체온·혈류 상승, 저혈압 경향 보조\n" +
-          "- 로즈마리 EO (주의: 고혈압·경련성 체질 시 농도 조절): 혈류 촉진·근육 피로 회복\n" +
-          "- 패출리 EO: 하체부종·정체감, 체액 정체에 도움\n" +
-          "- 사이프러스 EO(보유 시): 정맥·림프 순환, 부종 케어에 적합\n" +
-          "- 주니퍼베리 EO(보유 시): 체액 정체·림프·해독 계열에 보조, 신장·이뇨 관련 주의 필요\n" +
-          "- 블랙페퍼 EO(저농도): 국소 순환·온열감 보조, 민감피부에는 테스트 후 사용"
-        );
-      }
-
-      if (hasConstipation || hasDiarrhea || hasIrregularMeal || hasAbdFat) {
-        aromaSections.push("");
-        aromaSections.push("③ 소화·장 기능 / 복부비만·변비");
-        aromaSections.push(
-          "- 스위트 오렌지·만다린 EO: 위장 긴장 완화, 식욕·소화 리듬 정돈\n" +
-          "- 페퍼민트 EO(저농도): 소화 불편·더부룩함에 단기간 보조 (위염·역류 경향 시 주의)\n" +
-          "- 진저 EO: 위장 냉·복부 냉감, 장운동 활성 보조\n" +
-          "- 코리앤더 시드 EO(보유 시): 소화·식욕·복부 긴장 완화에 부드럽게 사용\n" +
-          "- 펜넬 EO 사용 시: 호르몬 관련 질환·임신 등에는 주의 또는 회피"
-        );
-      }
-
-      if (hasMenopause || hasMenstruation) {
-        aromaSections.push("");
-        aromaSections.push("④ 호르몬 밸런스 / 완경·갱년기·PMS");
-        aromaSections.push(
-          "- 제라늄 EO: 기분 기복·안면홍조·부종·피부 변화에 두루 도움\n" +
-          "- 팔마로사 EO(보유 시): 피부·호르몬 밸런스, 정서 안정에 부드럽게 사용\n" +
-          "- 클라리세이지 EO: PMS·생리통·갱년기 증상에 도움 가능하나,\n" +
-          "  유방암·자궁질환·에스트로겐 의존성 질환 의심 시 사용 회피 또는 전문가·의사와 상의 후 결정\n" +
-          "- 프랑킨센스·네롤리 계열: 정서 안정과 함께 완경기 정체감 완화에 보조"
-        );
-      }
-
-      if (hasDepress || hasAnxious || hasStress) {
-        aromaSections.push("");
-        aromaSections.push("⑤ 정서·기분 관리");
-        aromaSections.push(
-          "- 시트러스 계열 (스위트 오렌지, 베르가못 등): 기분 전환, 아침·낮 시간에 적합\n" +
-          "- 우드·레진 계열 (프랑킨센스, 시더우드 등): 저녁·수면 전 안정감 부여\n" +
-          "- 일랑일랑 EO: 과도한 긴장·분노·짜증에 부드러운 이완, 저혈압·두통 경향 시 과다 사용 주의\n" +
-          "- 베티버 EO: 깊은 뿌리 내림 느낌, 불안·공허감에 서서히 안정감을 부여\n" +
-          "- 고객이 좋아하는 향 노트(플로럴/우디/시트러스)에 맞춰 조합합니다."
-        );
-      }
-
-      if (!(
-        hasInsomnia || hasStress || hasAnxious || hasDepress ||
-        hasCold || hasHypotension || hasLowerBody || hasEdema || hasAbdFat ||
-        hasConstipation || hasDiarrhea || hasIrregularMeal || hasMenopause || hasMenstruation
-      )) {
-        aromaSections.push("");
-        aromaSections.push("※ 현재 텍스트만으로는 특정 증상 군이 뚜렷하지 않아,");
-        aromaSections.push("   기본적으로 '신경 안정 + 순환 + 장·림프'를 모두 고려한 복합 블렌딩을 권장합니다.");
-      }
-
-      aromaSections.push("");
-      aromaSections.push("● 로블코코 · 엘라곰 · 베르베르 활용 가이드");
-      aromaSections.push(
-        "- 로블코코 GUNG(궁): 골반·하복부·여성 호르몬·PMS·완경 케어 중심\n" +
-        "- 로블코코 BALM: 관절·근육·경추·허리·어깨 등 국소 통증·뭉침 스팟 관리용\n" +
-        "- 로블코코 HOME CARE: 바디오일·크림 등 집에서 매일 사용할 기본 라인\n" +
-        "- 로블코코 SPA: 샵 전용 고함량 포뮬라, 온열뱀부 바디·페이셜·디톡스 프로그램용\n" +
-        "- 로블코코 아로마백틱: 롤온·포인트 향 처방, 수면·집중·PMS·기분전환 등에 즉시 사용\n" +
-        "- 로블코코 Blending E.O.: 목적별 블렌딩 EO, 바디·페이셜·디퓨저·입욕에 다양하게 활용\n" +
-        "- Bamboo Life: 온열뱀부 시너지 극대화 라인, 하체·림프·셀룰라이트 관리 핵심\n" +
-        "- 엘라곰(Ellagom) EO: 단일 EO 및 블렌딩의 베이스, 과학적 성분 설명과 함께 상담 시 활용\n" +
-        "- 베르베르(Verber): 보습·진정·클렌징 등 피부 베이스 관리에 활용"
-      );
-
-      const aromaText = aromaSections.join("\n");
-
-      let treatLines = [];
-      treatLines.push("● 기본 방향");
-      treatLines.push(
-        "- 하초(복부·골반·다리)를 따뜻하게 하여 순환을 열고,\n" +
-        "  상체·두부의 과도한 긴장은 부드럽게 내려주는 방향으로 진행합니다."
-      );
-
-      if (hasLowerBody || hasEdema || hasCold || hasAbdFat) {
-        treatLines.push("");
-        treatLines.push("● 온열뱀부 적용 포인트 (하체·복부)");
-        treatLines.push(
-          "- 복부·장요근·하복부: 무리 없는 압으로 길게 열을 전달하여 장운동·림프 활성화\n" +
-          "- 다리 전체(발목→종아리→슬와부→허벅지→서혜부): 림프 흐름 방향에 맞춘 반복 스트로크\n" +
-          "- 온도: 약 40~42℃, 저혈압·피로도가 높다면 땀 배출보다 '편안한 따뜻함'에 초점"
-        );
-      }
-
-      if (hasInsomnia || hasStress || hasDepress || hasAnxious) {
-        treatLines.push("");
-        treatLines.push("● 상체·정신적 긴장 케어");
-        treatLines.push(
-          "- 승모근·견갑골 주변: 40~60% 강도의 압으로 천천히, 긴 스트로크\n" +
-          "- 경추·두개골 하부: 미세한 진동·압을 이용해 자율신경계를 진정\n" +
-          "- 횡격막·흉곽 앞뒤를 부드럽게 풀어 복식호흡을 만들어 주는 것이 중요"
-        );
-      }
-
-      if (!(
-        hasLowerBody || hasEdema || hasCold || hasAbdFat ||
-        hasInsomnia || hasStress || hasDepress || hasAnxious
-      )) {
-        treatLines.push("");
-        treatLines.push(
-          "● 필요에 따라 복부/하체 중심 또는 경추/어깨 중심으로 강약·시간을 조절하며,\n" +
-          "  고객의 피로도와 컨디션에 따라 온열 강도와 압을 세밀하게 조정합니다."
-        );
-      }
-
-      const treatText = treatLines.join("\n");
-
-      let homeLines = [];
-      homeLines.push("● 수면 루틴");
-      if (hasInsomnia) {
-        homeLines.push(
-          "- 취침 1시간 전, 마조람·프랑킨센스 기반 블렌딩 오일을 손목·가슴 중앙에 소량 바르고 깊은 호흡\n" +
-          "- 30분 전부터는 화면(휴대폰/TV)을 줄이고 조명을 낮추도록 안내합니다.\n" +
-          "- 수면용 로블코코 아로마백틱 또는 HOME CARE 수면 라인을 지정해 습관화하도록 돕습니다."
-        );
-      } else {
-        homeLines.push(
-          "- 취침 전 가벼운 스트레칭과 따뜻한 족욕 10분을 기본 루틴으로 제안합니다.\n" +
-          "- 필요 시 릴랙스 계열 아로마백틱/바디오일을 추가합니다."
-        );
-      }
-
-      homeLines.push("");
-      homeLines.push("● 순환·체형 관리");
-      if (hasLowerBody || hasEdema || hasAbdFat || hasCold || hasHypotension) {
-        homeLines.push(
-          "- 샤워 후 하체 전용 바디오일 또는 Bamboo Life/슬리밍 계열 제품으로\n" +
-          "  발목→종아리→슬와부→허벅지→서혜부 방향의 셀프 마사지 루틴을 교육합니다.\n" +
-          "- 복부비만이 동반된 경우, 복부 순환용 궁·슬림 오일을 따로 구성해 원형 마사지 5~10분 추가."
-        );
-      } else {
-        homeLines.push(
-          "- 주 3회 이상 전신에 바디오일을 도포해 피부·순환·긴장을 함께 관리하도록 안내합니다.\n" +
-          "- HOME CARE 바디오일 또는 엘라곰 EO 희석 오일을 기본 루틴으로 설정합니다."
-        );
-      }
-
-      if (hasConstipation) {
-        homeLines.push("");
-        homeLines.push("● 장·변비 케어");
-        homeLines.push(
-          "- 아침 미지근한 물 1컵 + 식이섬유 섭취를 매일 꾸준히 유지하도록 교육합니다.\n" +
-          "- 취침 전 복부 온열팩 또는 따뜻한 수건을 10분 정도 올려두고, 가벼운 복부 마사지를 병행합니다."
-        );
-      }
-
-      if (hasMenopause) {
-        homeLines.push("");
-        homeLines.push("● 완경기 자가 관리");
-        homeLines.push(
-          "- 무리한 다이어트보다 규칙적인 걷기·가벼운 근력 운동을 우선합니다.\n" +
-          "- 하루 중 '나만의 10분 아로마 타임'(아로마백틱 흡입 + 스트레칭)을 정해 놓고 유지하도록 안내합니다.\n" +
-          "- GUNG·HOME CARE 라인 중 머리→가슴→복부→하체로 사용할 수 있는 제품 동선을 만들어 루틴화합니다."
-        );
-      }
-
-      const homeText = homeLines.join("\n");
-
-      let keyword = "";
-      if (hasMenopause) keyword += "완경/갱년기 · ";
-      if (hasCold) keyword += "수족냉증 · ";
-      if (hasInsomnia) keyword += "수면장애 · ";
-      if (hasLowerBody) keyword += "하체비만 · ";
-      if (hasEdema) keyword += "부종 · ";
-      if (hasConstipation) keyword += "변비 · ";
-      if (hasDepress) keyword += "우울감 · ";
-      if (hasStress || hasAnxious) keyword += "스트레스/불안 · ";
-      if (keyword.endsWith(" · ")) keyword = keyword.slice(0, -3);
-      if (!keyword) keyword = "복합 체질/라이프스타일 패턴";
-
-      return { patternText, causeText, aromaText, treatText, homeText, keyword };
-    }
-
-    function buildProductsHtml(products) {
-      const list = Array.isArray(products) ? products : [];
-      if (list.length === 0) {
-        return "등록된 홈케어 제품이 없습니다.\n구매 시 제품명과 용도, 사용법을 기록해 두면 다음 내방 때 상담에 큰 도움이 됩니다.";
-      }
-
-      const grouped = {};
-      list.forEach(p => {
-        const cat = p.category || "";
-        if (!grouped[cat]) grouped[cat] = [];
-        grouped[cat].push(p);
-      });
-
-      let html = '<div class="product-list">';
-      Object.keys(grouped).forEach(cat => {
-        const label = CATEGORY_LABELS[cat] || CATEGORY_LABELS[""];
-        html += `<div class="product-item"><div class="product-name">${label}</div></div>`;
-        grouped[cat].forEach(p => {
-          const d = p.date || "";
-          const nm = p.name || "";
-          const nt = (p.note || "").trim();
-          html += `
-            <div class="product-item" style="padding-left:10px;">
-              <div class="product-name">${nm}</div>
-              <div class="product-meta">${d}</div>
-              ${nt ? `<div>${nt}</div>` : ""}
-            </div>
-          `;
-        });
-      });
-      html += "</div>";
-      return html;
-    }
-
-    function buildCoursesHtml(courses) {
-      const list = Array.isArray(courses) ? courses : [];
-      if (!list.length) {
-        return "등록된 관리 프로그램이 없습니다.\n결제금액·관리횟수·관리기간(3/6/9/12개월)·연장기한을 등록해 두면 관리가 편리합니다.";
-      }
-
-      let html = '<div class="product-list">';
-      list.forEach(c => {
-        const name = c.name || "-";
-        const total = c.totalSessions || 0;
-        const used = c.usedSessions || 0;
-        const remain = total ? Math.max(total - used, 0) : "-";
-        const price = (c.price || "").trim();
-        const period = (c.period || "").trim();
-        const extend = (c.extend || "").trim();
-        const memo = (c.memo || "").trim();
-
-        html += `
-          <div class="product-item">
-            <div class="product-name">${name}</div>
-            <div class="product-meta">
-              관리횟수: 총 ${total}회 · 사용 ${used}회 · 남은 ${remain}회
-            </div>
-            <div class="product-meta">
-              결제금액: ${price || "-"} · 관리기간: ${period || "-"} · 연장기한: ${extend || "-"}
-            </div>
-            ${memo ? `<div>${memo}</div>` : ""}
-          </div>
-        `;
-      });
-      html += "</div>";
-      return html;
-    }
-
-    function buildAppointmentsHtml(appointments) {
-      const list = Array.isArray(appointments) ? appointments.slice() : [];
-      if (!list.length) {
-        return "등록된 예약 일정이 없습니다.\n다음 방문이 확정되면 예약 날짜와 간단한 메모, 테라피·홈케어 내용을 함께 기록해 두세요.";
-      }
-
-      list.sort((a, b) => {
-        const da = new Date(a.dateTime || 0).getTime();
-        const db = new Date(b.dateTime || 0).getTime();
-        return da - db;
-      });
-
-      let html = '<div class="product-list">';
-      list.forEach(ap => {
-        const dt = ap.dateTime || "";
-        const memo = (ap.memo || "").trim();
-        const therapy = (ap.therapyNote || "").trim();
-        const home = (ap.homecareOilNote || "").trim();
-        html += `
-          <div class="product-item">
-            <div class="product-name">${dt}</div>
-            ${memo ? `<div>${memo}</div>` : ""}
-            ${therapy ? `<div><strong>테라피 내용:</strong> ${therapy}</div>` : ""}
-            ${home ? `<div><strong>홈케어 아로마오일/제품:</strong> ${home}</div>` : ""}
-          </div>
-        `;
-      });
-      html += "</div>";
-      return html;
-    }
-
-    function buildHistoryListHtml(histories, activeIndex) {
-      const list = Array.isArray(histories) ? histories : [];
-      if (list.length === 0) {
-        return "저장된 상담 히스토리가 없습니다.";
-      }
-      let html = '<div class="history-list">';
-      list.forEach((h, idx) => {
-        const cls = idx === activeIndex ? "history-item active" : "history-item";
-        const date = h.date || "";
-        html += `
-          <div class="${cls}" data-history-index="${idx}">
-            <span class="history-date">${date}</span>
-            <span class="history-badge">SESSION ${idx + 1}</span>
-          </div>
-        `;
-      });
-      html += "</div>";
-      return html;
-    }
-
-    function fillCourseSelect(client) {
-      const select = sessionCourseEl;
-      if (!select) return;
-      const previous = select.value;
-      select.innerHTML = '<option value="">이번 방문에 해당 관리 프로그램 선택 (선택사항)</option>';
-      if (!client || !Array.isArray(client.courses)) return;
-      client.courses.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        const used = c.usedSessions || 0;
-        const total = c.totalSessions || 0;
-        opt.textContent = total
-          ? `${c.name} (${used}/${total}회)`
-          : `${c.name} (${used}회 사용)`;
-        select.appendChild(opt);
-      });
-      if (previous) {
-        const exists = Array.from(select.options).some(o => o.value === previous);
-        if (exists) select.value = previous;
-      }
-    }
-
-    function fillAppointmentSelect(client) {
-      const select = appointmentSelectForNoteEl;
-      if (!select) return;
-      select.innerHTML = '<option value="">테라피 내용을 기록할 예약 선택</option>';
-      if (!client || !Array.isArray(client.appointments)) return;
-      client.appointments.forEach((ap, idx) => {
-        const opt = document.createElement("option");
-        const id = ap.id || String(idx);
-        opt.value = id;
-        const label = (ap.dateTime || "") + (ap.memo ? " - " + ap.memo : "");
-        opt.textContent = label || "(날짜 정보 없음)";
-        select.appendChild(opt);
-      });
-    }
-
-    function renderResult(rawText, meta, analysis, dateLabel, client, activeHistoryIndex) {
-      if (!rawText.trim()) {
-        resultContainer.innerHTML = `
-          <div class="result-section">
-            <div class="result-body">
-              왼쪽에 고객 정보를 입력하고 상담 내용, 관리 프로그램 사용, 홈케어 제품, 예약 일정을 기록한 뒤  
-              [상담 리포트 생성 및 저장]이나 각 추가 버튼을 누르면,  
-              방문 날짜별 상담 기록과 관리 프로그램·홈케어·예약 정보,  
-              그리고 로블코코/엘라곰/베르베르 활용 방향까지 한 번에 확인할 수 있습니다.
-            </div>
-          </div>
-        `;
-        currentHistoryIndex = null;
-        return;
-      }
-
-      const name = meta.name || "-";
-      const phone = meta.phone || "-";
-      const birth = formatBirth(meta.birth || "");
-      const genderText = genderLabel(meta.gender);
-      const usedDate = dateLabel || getDateLabel();
-
-      const histories = client && Array.isArray(client.histories) ? client.histories : [];
-      const products = client && Array.isArray(client.products) ? client.products : [];
-      const courses = client && Array.isArray(client.courses) ? client.courses : [];
-      const appointments = client && Array.isArray(client.appointments) ? client.appointments : [];
-
-      let idx = typeof activeHistoryIndex === "number" ? activeHistoryIndex : (histories.length ? histories.length - 1 : 0);
-      if (idx < 0 && histories.length) idx = histories.length - 1;
-      if (idx >= histories.length) idx = histories.length - 1;
-      if (!histories.length) idx = null;
-      currentHistoryIndex = idx;
-
-      const historyHtml = buildHistoryListHtml(histories, idx ?? -1);
-      const productsHtml = buildProductsHtml(products);
-      const coursesHtml = buildCoursesHtml(courses);
-      const appointmentsHtml = buildAppointmentsHtml(appointments);
-
-      let sessionSummaryHtml = "";
-      if (histories.length && idx !== null && histories[idx]) {
-        const h = histories[idx];
-        const courseId = h.courseId || "";
-        const usedCount = h.usedSessions || 0;
-        const eventNote = (h.eventNote || "").trim();
-        const course = courses.find(c => c.id === courseId);
-
-        sessionSummaryHtml = '<div style="margin-top:8px;font-size:12px;">';
-        sessionSummaryHtml += `<div><strong>선택된 상담일:</strong> ${h.date || "-"}</div>`;
-        if (course) {
-          sessionSummaryHtml += `<div><strong>사용 관리 프로그램:</strong> ${course.name} (${course.usedSessions || 0}/${course.totalSessions || 0}회 사용)</div>`;
-          if (usedCount > 0) {
-            sessionSummaryHtml += `<div><strong>이번 방문 차감 회차:</strong> ${usedCount}회</div>`;
-          }
-        } else if (usedCount > 0) {
-          sessionSummaryHtml += `<div><strong>이번 방문 차감 회차:</strong> ${usedCount}회</div>`;
-        }
-        if (eventNote) {
-          sessionSummaryHtml += `<div><strong>이벤트/증정:</strong> ${eventNote}</div>`;
-        }
-        sessionSummaryHtml += "</div>";
-      }
-
-      fillAppointmentSelect(client);
-
-      resultContainer.innerHTML = `
-        <div class="result-header">
-          <div class="result-header-row">
-            <span class="result-label">이름</span>
-            <span class="result-value">${name}</span>
-            <span class="result-label">성별</span>
-            <span class="result-value">${genderText}</span>
-          </div>
-          <div class="result-header-row">
-            <span class="result-label">생년월일</span>
-            <span class="result-value">${birth}</span>
-            <span class="result-label">연락처</span>
-            <span class="result-value">${phone}</span>
-          </div>
-          <div class="result-header-row">
-            <span class="result-label">상담 일시</span>
-            <span class="result-value">${usedDate}</span>
-            <span class="result-label">핵심 키워드</span>
-            <span class="result-value">${analysis.keyword}</span>
-          </div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">0 · 상담 히스토리</div>
-          <div class="result-body">
-            ${historyHtml}
-            ${sessionSummaryHtml}
-          </div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">1 · 오행·체질 분석</div>
-          <div class="result-body">${analysis.patternText}</div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">2 · 불균형 원인 정리</div>
-          <div class="result-body">${analysis.causeText}</div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">3 · 추천 아로마 및 블렌딩 방향</div>
-          <div class="result-body">${analysis.aromaText}</div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">4 · 시술 전략 (온열뱀부 포함)</div>
-          <div class="result-body">${analysis.treatText}</div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">5 · 홈케어 루틴 제안</div>
-          <div class="result-body">${analysis.homeText}</div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">6 · 홈케어 제품 기록</div>
-          <div class="result-body">${productsHtml}</div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">7 · 관리 프로그램 / 회차 현황</div>
-          <div class="result-body">${coursesHtml}</div>
-        </div>
-
-        <div class="result-section">
-          <div class="result-title">8 · 예약 스케줄</div>
-          <div class="result-body">${appointmentsHtml}</div>
-        </div>
-      `;
-
-      bindHistoryClickHandlers(histories);
-    }
-
-    function bindHistoryClickHandlers(histories) {
-      const list = Array.isArray(histories) ? histories : [];
-      const items = resultContainer.querySelectorAll(".history-item");
-      items.forEach(el => {
-        el.addEventListener("click", () => {
-          const idxStr = el.getAttribute("data-history-index");
-          const idx = parseInt(idxStr, 10);
-          if (Number.isNaN(idx) || !currentClientId) return;
-
-          const clients = loadClients();
-          const client = clients[currentClientId];
-          if (!client || !Array.isArray(client.histories) || !client.histories[idx]) return;
-
-          const history = client.histories[idx];
-          const note = history.note || "";
-          inputEl.value = note;
-
-          const meta = {
-            name: client.name || "",
-            phone: client.phone || "",
-            birth: client.birth || "",
-            gender: client.gender || ""
-          };
-
-          const analysis = analyzeText(note, meta);
-          if (!Array.isArray(client.products)) client.products = [];
-          if (!Array.isArray(client.courses)) client.courses = [];
-          if (!Array.isArray(client.appointments)) client.appointments = [];
-
-          fillCourseSelect(client);
-          fillAppointmentSelect(client);
-          renderResult(note, meta, analysis, history.date, client, idx);
-        });
-      });
-    }
-
-    analyzeBtn.addEventListener("click", () => {
-      const meta = {
-        name: nameEl.value.trim(),
-        phone: phoneEl.value.trim(),
-        birth: birthEl.value,
-        gender: genderEl.value
-      };
-      const rawText = inputEl.value;
-
-      if (!meta.name) {
-        alert("먼저 고객 이름을 입력해 주세요.");
-        nameEl.focus();
-        return;
-      }
-      if (!rawText.trim()) {
-        alert("고객의 현재 증상·상태를 간단히라도 입력해 주세요.");
-        inputEl.focus();
-        return;
-      }
-
-      const clients = loadClients();
-      const id = makeClientId(meta.name, meta.phone || "");
-      const existing = clients[id] || {
-        name: meta.name,
-        phone: meta.phone,
-        birth: meta.birth,
-        gender: meta.gender,
-        histories: [],
-        products: [],
-        courses: [],
-        appointments: []
-      };
-
-      existing.name = meta.name;
-      existing.phone = meta.phone;
-      existing.birth = meta.birth;
-      existing.gender = meta.gender;
-      if (!Array.isArray(existing.histories)) existing.histories = [];
-      if (!Array.isArray(existing.products)) existing.products = [];
-      if (!Array.isArray(existing.courses)) existing.courses = [];
-      if (!Array.isArray(existing.appointments)) existing.appointments = [];
-
-      let usedCount = parseInt(sessionUsedCountEl.value || "0", 10);
-      if (Number.isNaN(usedCount) || usedCount < 0) usedCount = 0;
-      const selectedCourseId = sessionCourseEl.value || "";
-      const eventNote = (sessionEventEl.value || "").trim();
-
-      if (selectedCourseId && usedCount > 0) {
-        const course = existing.courses.find(c => c.id === selectedCourseId);
-        if (course) {
-          const total = course.totalSessions || 0;
-          const currentUsed = course.usedSessions || 0;
-          let newUsed = currentUsed + usedCount;
-          if (total && newUsed > total) newUsed = total;
-          course.usedSessions = newUsed;
-        }
-      }
-
-      const dateLabel = getDateLabel();
-      const analysis = analyzeText(rawText, meta);
-
-      existing.histories.push({
-        date: dateLabel,
-        note: rawText,
-        courseId: selectedCourseId || "",
-        usedSessions: usedCount > 0 ? usedCount : 0,
-        eventNote: eventNote
-      });
-
-      clients[id] = existing;
-      saveClients(clients);
-      currentClientId = id;
-
-      sessionUsedCountEl.value = "";
-      sessionEventEl.value = "";
-
-      fillCourseSelect(existing);
-      fillAppointmentSelect(existing);
-      renderResult(rawText, meta, analysis, dateLabel, existing, existing.histories.length - 1);
-    });
-
-    addCourseBtn.addEventListener("click", () => {
-      const name = nameEl.value.trim();
-      const phone = phoneEl.value.trim();
-      if (!name) {
-        alert("먼저 고객 이름을 입력해 주세요.");
-        nameEl.focus();
-        return;
-      }
-
-      const cName = courseNameEl.value.trim();
-      let total = parseInt(courseTotalEl.value || "0", 10);
-      const cPrice = coursePriceEl.value.trim();
-      const cPeriod = coursePeriodEl.value;
-      const cExtend = courseExtendEl.value.trim();
-      const memo = courseMemoEl.value.trim();
-
-      if (!cName) {
-        alert("관리 프로그램명을 입력해 주세요.");
-        courseNameEl.focus();
-        return;
-      }
-      if (Number.isNaN(total) || total <= 0) {
-        alert("관리 횟수를 1 이상으로 입력해 주세요.");
-        courseTotalEl.focus();
-        return;
-      }
-      if (!cPeriod) {
-        alert("관리 기간을 3/6/9/12개월 중 선택해 주세요.");
-        coursePeriodEl.focus();
-        return;
-      }
-
-      const clients = loadClients();
-      const id = makeClientId(name, phone || "");
-      const existing = clients[id] || {
-        name,
-        phone,
-        birth: birthEl.value,
-        gender: genderEl.value,
-        histories: [],
-        products: [],
-        courses: [],
-        appointments: []
-      };
-
-      if (!Array.isArray(existing.courses)) existing.courses = [];
-
-      const courseId = "c_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
-
-      existing.courses.push({
-        id: courseId,
-        name: cName,
-        totalSessions: total,
-        usedSessions: 0,
-        price: cPrice,
-        period: cPeriod,
-        extend: cExtend,
-        memo: memo
-      });
-
-      existing.name = name;
-      existing.phone = phone;
-      existing.birth = birthEl.value;
-      existing.gender = genderEl.value;
-
-      clients[id] = existing;
-      saveClients(clients);
-      currentClientId = id;
-
-      courseNameEl.value = "";
-      courseTotalEl.value = "";
-      coursePriceEl.value = "";
-      coursePeriodEl.value = "";
-      courseExtendEl.value = "";
-      courseMemoEl.value = "";
-
-      fillCourseSelect(existing);
-      fillAppointmentSelect(existing);
-
-      let note = inputEl.value.trim();
-      let historyIndex = -1;
-      let historyDate = getDateLabel();
-
-      if (!note && Array.isArray(existing.histories) && existing.histories.length > 0) {
-        const lastHistory = existing.histories[existing.histories.length - 1];
-        note = lastHistory.note || "";
-        historyDate = lastHistory.date || historyDate;
-        historyIndex = existing.histories.length - 1;
-      }
-
-      if (note) {
-        const meta = {
-          name: existing.name || "",
-          phone: existing.phone || "",
-          birth: existing.birth || "",
-          gender: existing.gender || ""
-        };
-        const analysis = analyzeText(note, meta);
-        renderResult(
-          note,
-          meta,
-          analysis,
-          historyDate,
-          existing,
-          historyIndex >= 0 ? historyIndex : existing.histories.length - 1
-        );
-      }
-    });
-
-    addProductBtn.addEventListener("click", () => {
-      const name = nameEl.value.trim();
-      const phone = phoneEl.value.trim();
-      const pName = productNameEl.value.trim();
-      const pNote = productNoteEl.value.trim();
-      const pCat = productCategoryEl.value;
-
-      if (!name) {
-        alert("먼저 고객 이름을 입력해 주세요.");
-        nameEl.focus();
-        return;
-      }
-      if (!pName) {
-        alert("추가할 제품명을 입력해 주세요.");
-        productNameEl.focus();
-        return;
-      }
-
-      const clients = loadClients();
-      const id = makeClientId(name, phone || "");
-      const existing = clients[id] || {
-        name,
-        phone,
-        birth: birthEl.value,
-        gender: genderEl.value,
-        histories: [],
-        products: [],
-        courses: [],
-        appointments: []
-      };
-
-      if (!Array.isArray(existing.products)) existing.products = [];
-
-      const dateLabel = getDateLabel();
-      existing.products.push({
-        date: dateLabel,
-        name: pName,
-        note: pNote,
-        category: pCat
-      });
-
-      existing.name = name;
-      existing.phone = phone;
-      existing.birth = birthEl.value;
-      existing.gender = genderEl.value;
-
-      clients[id] = existing;
-      saveClients(clients);
-      currentClientId = id;
-
-      productNameEl.value = "";
-      productNoteEl.value = "";
-      productCategoryEl.value = "";
-
-      fillCourseSelect(existing);
-      fillAppointmentSelect(existing);
-
-      let note = inputEl.value.trim();
-      let lastDate = dateLabel;
-      let historyIndex = -1;
-
-      if (!note && Array.isArray(existing.histories) && existing.histories.length > 0) {
-        const lastHistory = existing.histories[existing.histories.length - 1];
-        note = lastHistory.note || "";
-        lastDate = lastHistory.date || dateLabel;
-        historyIndex = existing.histories.length - 1;
-      }
-
-      if (note) {
-        const meta = {
-          name: existing.name || "",
-          phone: existing.phone || "",
-          birth: existing.birth || "",
-          gender: existing.gender || ""
-        };
-        const analysis = analyzeText(note, meta);
-        renderResult(note, meta, analysis, lastDate, existing, historyIndex >= 0 ? historyIndex : existing.histories.length - 1);
-      }
-    });
-
-    addAppointmentBtn.addEventListener("click", () => {
-      const name = nameEl.value.trim();
-      const phone = phoneEl.value.trim();
-      const dt = appointmentDateTimeEl.value;
-      const memo = appointmentMemoEl.value.trim();
-
-      if (!name) {
-        alert("먼저 고객 이름을 입력해 주세요.");
-        nameEl.focus();
-        return;
-      }
-      if (!dt) {
-        alert("예약 날짜와 시간을 선택해 주세요.");
-        appointmentDateTimeEl.focus();
-        return;
-      }
-
-      const clients = loadClients();
-      const id = makeClientId(name, phone || "");
-      const existing = clients[id] || {
-        name,
-        phone,
-        birth: birthEl.value,
-        gender: genderEl.value,
-        histories: [],
-        products: [],
-        courses: [],
-        appointments: []
-      };
-
-      if (!Array.isArray(existing.appointments)) existing.appointments = [];
-
-      const appointmentId = "a_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
-
-      existing.appointments.push({
-        id: appointmentId,
-        dateTime: dt,
-        memo: memo,
-        therapyNote: "",
-        homecareOilNote: ""
-      });
-
-      existing.name = name;
-      existing.phone = phone;
-      existing.birth = birthEl.value;
-      existing.gender = genderEl.value;
-
-      clients[id] = existing;
-      saveClients(clients);
-      currentClientId = id;
-
-      appointmentDateTimeEl.value = "";
-      appointmentMemoEl.value = "";
-
-      fillCourseSelect(existing);
-      fillAppointmentSelect(existing);
-
-      let note = inputEl.value.trim();
-      let historyIndex = -1;
-      let historyDate = getDateLabel();
-
-      if (!note && Array.isArray(existing.histories) && existing.histories.length > 0) {
-        const lastHistory = existing.histories[existing.histories.length - 1];
-        note = lastHistory.note || "";
-        historyDate = lastHistory.date || historyDate;
-        historyIndex = existing.histories.length - 1;
-      }
-
-      if (note) {
-        const meta = {
-          name: existing.name || "",
-          phone: existing.phone || "",
-          birth: existing.birth || "",
-          gender: existing.gender || ""
-        };
-        const analysis = analyzeText(note, meta);
-        renderResult(note, meta, analysis, historyDate, existing, historyIndex >= 0 ? historyIndex : existing.histories.length - 1);
-      }
-    });
-
-    saveAppointmentNoteBtn.addEventListener("click", () => {
-      const name = nameEl.value.trim();
-      const phone = phoneEl.value.trim();
-      if (!name) {
-        alert("먼저 고객 이름을 입력해 주세요.");
-        nameEl.focus();
-        return;
-      }
-
-      const selectedId = appointmentSelectForNoteEl.value;
-      if (!selectedId) {
-        alert("테라피 내용을 기록할 예약을 선택해 주세요.");
-        appointmentSelectForNoteEl.focus();
-        return;
-      }
-
-      const therapy = therapyNoteEl.value.trim();
-      const home = homecareOilNoteEl.value.trim();
-      if (!therapy && !home) {
-        alert("테라피 내용 또는 홈케어 아로마오일/제품 중 하나 이상을 입력해 주세요.");
-        therapyNoteEl.focus();
-        return;
-      }
-
-      const clients = loadClients();
-      const id = makeClientId(name, phone || "");
-      const existing = clients[id];
-      if (!existing || !Array.isArray(existing.appointments)) {
-        alert("해당 고객의 예약 정보가 없습니다.");
-        return;
-      }
-
-      let apIndex = existing.appointments.findIndex(a => a.id === selectedId);
-      if (apIndex === -1) {
-        const idx = parseInt(selectedId, 10);
-        if (!Number.isNaN(idx) && existing.appointments[idx]) apIndex = idx;
-      }
-      if (apIndex === -1) {
-        alert("선택한 예약을 찾을 수 없습니다.");
-        return;
-      }
-
-      const ap = existing.appointments[apIndex];
-      ap.therapyNote = therapy;
-      ap.homecareOilNote = home;
-      existing.appointments[apIndex] = ap;
-
-      clients[id] = existing;
-      saveClients(clients);
-      currentClientId = id;
-
-      fillAppointmentSelect(existing);
-
-      let note = inputEl.value.trim();
-      let historyIndex = -1;
-      let historyDate = getDateLabel();
-
-      if (!note && Array.isArray(existing.histories) && existing.histories.length > 0) {
-        const lastHistory = existing.histories[existing.histories.length - 1];
-        note = lastHistory.note || "";
-        historyDate = lastHistory.date || historyDate;
-        historyIndex = existing.histories.length - 1;
-      }
-
-      if (note) {
-        const meta = {
-          name: existing.name || "",
-          phone: existing.phone || "",
-          birth: existing.birth || "",
-          gender: existing.gender || ""
-        };
-        const analysis = analyzeText(note, meta);
-        renderResult(
-          note,
-          meta,
-          analysis,
-          historyDate,
-          existing,
-          historyIndex >= 0 ? historyIndex : existing.histories.length - 1
-        );
-      }
-    });
-
-    clearBtn.addEventListener("click", () => {
-      inputEl.value = "";
-      nameEl.value = "";
-      phoneEl.value = "";
-      birthEl.value = "";
-      genderEl.value = "";
-      searchNameEl.value = "";
-
-      sessionCourseEl.innerHTML = '<option value="">이번 방문에 해당 관리 프로그램 선택 (선택사항)</option>';
-      sessionUsedCountEl.value = "";
-      sessionEventEl.value = "";
-
-      courseNameEl.value = "";
-      courseTotalEl.value = "";
-      coursePriceEl.value = "";
-      coursePeriodEl.value = "";
-      courseExtendEl.value = "";
-      courseMemoEl.value = "";
-
-      productCategoryEl.value = "";
-      productNameEl.value = "";
-      productNoteEl.value = "";
-
-      appointmentDateTimeEl.value = "";
-      appointmentMemoEl.value = "";
-      appointmentSelectForNoteEl.innerHTML = '<option value="">테라피 내용을 기록할 예약 선택</option>';
-      therapyNoteEl.value = "";
-      homecareOilNoteEl.value = "";
-
-      currentClientId = null;
-      currentHistoryIndex = null;
-
-      resultContainer.innerHTML = `
-        <div class="result-section">
-          <div class="result-body">
-            왼쪽에 고객 정보를 입력하고 상담 내용, 관리 프로그램 사용, 홈케어 제품, 예약 일정을 기록한 뒤  
-            [상담 리포트 생성 및 저장]이나 각 추가 버튼을 누르면,  
-            방문 날짜별 상담 기록과 관리 프로그램·홈케어·예약 정보,  
-            그리고 로블코코/엘라곰/베르베르 활용 방향까지 한 번에 확인할 수 있습니다.
-          </div>
-        </div>
-      `;
-      nameEl.focus();
-    });
-
-    loadBtn.addEventListener("click", () => {
-      const q = searchNameEl.value.trim();
-      if (!q) {
-        alert("불러올 고객의 이름을 입력해 주세요.");
-        searchNameEl.focus();
-        return;
-      }
-
-      const clients = loadClients();
-      const all = Object.values(clients);
-      const matches = all.filter(c => (c.name || "").trim() === q);
-
-      if (matches.length === 0) {
-        alert("해당 이름의 저장된 상담 기록이 없습니다.");
-        return;
-      }
-
-      let target = matches[0];
-      let latestDate = "";
-      matches.forEach(c => {
-        if (Array.isArray(c.histories) && c.histories.length > 0) {
-          const last = c.histories[c.histories.length - 1];
-          if (!latestDate || last.date > latestDate) {
-            latestDate = last.date;
-            target = c;
-          }
-        }
-      });
-
-      if (!target.histories || target.histories.length === 0) {
-        alert("저장된 상담 기록이 없습니다.");
-        return;
-      }
-
-      const lastHistory = target.histories[target.histories.length - 1];
-
-      nameEl.value = target.name || "";
-      phoneEl.value = target.phone || "";
-      birthEl.value = target.birth || "";
-      genderEl.value = target.gender || "";
-      inputEl.value = lastHistory.note || "";
-
-      if (!Array.isArray(target.products)) target.products = [];
-      if (!Array.isArray(target.courses)) target.courses = [];
-      if (!Array.isArray(target.appointments)) target.appointments = [];
-
-      currentClientId = makeClientId(target.name || "", target.phone || "");
-
-      const meta = {
-        name: target.name || "",
-        phone: target.phone || "",
-        birth: target.birth || "",
-        gender: target.gender || ""
-      };
-
-      const analysis = analyzeText(lastHistory.note || "", meta);
-
-      fillCourseSelect(target);
-      fillAppointmentSelect(target);
-      renderResult(
-        lastHistory.note || "",
-        meta,
-        analysis,
-        lastHistory.date,
-        target,
-        target.histories.length - 1
-      );
-    });
-
-    // PWA 설치 이벤트 처리
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      if (installBar) installBar.style.display = "flex";
-    });
-
-    if (installBtn) {
-      installBtn.addEventListener("click", async () => {
-        if (!deferredPrompt) {
-          alert("브라우저에서 앱 설치를 지원하지 않거나 조건이 아직 충족되지 않았습니다.");
-          return;
-        }
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === "accepted") {
-          if (installBar) installBar.style.display = "none";
-        }
-        deferredPrompt = null;
-      });
-    }
-
-    // 서비스워커 등록
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("sw.js")
-          .catch(() => {});
-      });
-    }
-  </script>
-</body>
+    <!-- /app-shell -->
+
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+    <!-- jsPDF for PDF download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Firebase 설정 & 앱 로직 -->
+    <script src="./firebase-init.js"></script>
+    <script src="./app.js"></script>
+  </body>
 </html>
