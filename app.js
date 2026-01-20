@@ -861,4 +861,14 @@ if ("serviceWorker" in navigator) {
       .catch((err) => console.log("Service worker registration failed:", err));
   });
 }
+function isStandaloneMode() {
+  // iOS Safari (홈화면 추가)
+  const iosStandalone = window.navigator.standalone === true;
+
+  // Android/Chrome PWA
+  const mqlStandalone = window.matchMedia("(display-mode: standalone)").matches;
+
+  return iosStandalone || mqlStandalone;
+}
+
 
