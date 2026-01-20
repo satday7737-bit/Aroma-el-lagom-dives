@@ -861,3 +861,4 @@ if ("serviceWorker" in navigator) {
       .catch((err) => console.log("Service worker registration failed:", err));
   });
 }
+
