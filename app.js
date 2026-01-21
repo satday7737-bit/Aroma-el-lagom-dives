@@ -878,5 +878,17 @@ function isStandaloneMode() {
   return iosStandalone || mqlStandalone;
 }
 
+window.addEventListener("load", () => {
+  const standalone = isStandaloneMode();
+
+  // 앱 모드 배지
+  const appBadge = document.getElementById("appModeBadge");
+  if (appBadge) appBadge.style.display = standalone ? "inline-flex" : "none";
+
+  // 웹에서만 보이는 안내
+  const webHint = document.getElementById("webOnlyHint");
+  if (webHint) webHint.style.display = standalone ? "none" : "block";
+});
+
 
 
