@@ -889,6 +889,39 @@ window.addEventListener("load", () => {
   const webHint = document.getElementById("webOnlyHint");
   if (webHint) webHint.style.display = standalone ? "none" : "block";
 });
+function applyModeUI() {
+  const standalone = isStandaloneMode();
+
+  document.querySelectorAll(".web-only").forEach(el => {
+    el.style.display = standalone ? "none" : "";
+  });
+
+  document.querySelectorAll(".app-only").forEach(el => {
+    el.style.display = standalone ? "" : "none";
+  });
+}
+
+window.addEventListener("load", applyModeUI);
+function lockBackNavigationInApp() {
+  if (!isStandaloneMode()) return;
+
+  // 현재 페이지를 히스토리에 고정
+  history.pushState({ app: true }, "", location.href);
+
+  window.addEventListener("popstate", () => {
+    const ok = confirm("앱을 종료하시겠습니까?");
+    if (ok) {
+      // 종료(뒤로 허용)
+      history.back();
+    } else {
+      // 종료 취소 → 다시 현재 상태 유지
+      history.pushState({ app: true }, "", location.href);
+    }
+  });
+}
+
+window.addEventListener("load", lockBackNavigationInApp);
+
 
 
 
