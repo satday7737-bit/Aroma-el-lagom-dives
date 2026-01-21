@@ -1,3 +1,10 @@
+function isStandaloneMode() {
+  // iOS Safari 홈화면 추가 상태
+  const iosStandalone = window.navigator.standalone === true;
+  // Android/Chrome PWA
+  const mqlStandalone = window.matchMedia("(display-mode: standalone)").matches;
+  return iosStandalone || mqlStandalone;
+}
 // ===============================
 // 0. 전역 & DOM 헬퍼
 // ===============================
@@ -870,5 +877,6 @@ function isStandaloneMode() {
 
   return iosStandalone || mqlStandalone;
 }
+
 
 
