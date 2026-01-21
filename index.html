@@ -429,10 +429,13 @@
           </div>
         </div>
         <div class="top-bar-right">
-  <span id="appModeBadge" class="pill" style="display:none;">APP MODE</span>
-  <span class="pill">PC · 모바일 동시 사용</span>
-  <span class="pill">Firebase Sync</span>
-  <span class="pill">로블코코 · 엘라곰 제품 연동</span>
+  <!-- 앱 모드에서만 보이게 -->
+  <span id="appModeBadge" class="pill app-only" style="display:none;">APP MODE</span>
+
+  <!-- 웹(브라우저)에서만 보이게 / 앱 모드에서는 숨김 -->
+  <span class="pill dev-pill web-only">PC · 모바일 동시 사용</span>
+  <span class="pill dev-pill web-only">Firebase Sync</span>
+  <span class="pill dev-pill web-only">로블코코 · 엘라곰 제품 연동</span>
 </div>
 
 
@@ -1003,6 +1006,7 @@
     <script src="./app.js"></script>
   </body>
 </html>
+
 
 
 
