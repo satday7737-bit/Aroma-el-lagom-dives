@@ -922,10 +922,11 @@ function lockBackNavigationInApp() {
 
 window.addEventListener("load", () => {
   setToday();
-  bindEvents();
+  
   applyModeUI();
   lockBackNavigationInApp(); // 
 });
+
 
 
 
