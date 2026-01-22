@@ -182,3 +182,12 @@ footer {
   font-size: 11px;
   color: #777;
 }
+
+/* 앱/웹 모드 전용 UI 제어 */
+.app-only {
+  display: none;
+}
+
+.web-only {
+  display: block;
+}
