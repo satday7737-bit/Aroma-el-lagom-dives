@@ -1,4 +1,4 @@
-const CACHE_NAME = "ael-cache-v7"; // 수정할 때마다 v 숫자 올리기
+const CACHE_NAME = "ael-cache-v8"; // 수정할 때마다 v 숫자 올리기
 
 const ASSETS = [
   "./",
@@ -37,3 +37,4 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request).then((res) => res || fetch(event.request))
   );
 });
+
