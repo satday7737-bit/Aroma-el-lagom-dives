@@ -1,23 +1,24 @@
 {
-  "name": "Aroma el lagom dives · Client Care Chart",
-  "short_name": "Client Care",
-  "description": "Aroma el lagom dives 고객 상담 차트",
-  "start_url": "/Aroma-el-lagom-dives/",
-  "scope": "/Aroma-el-lagom-dives/",
+  "name": "Aroma el lagom dives",
+  "short_name": "Aroma",
+  "description": "아로마 상담·처방 차트",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
   "icons": [
     {
-      "src": "/Aroma-el-lagom-dives/roblecoco_icon_192.png",
+      "src": "./roblecoco_icon_192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/Aroma-el-lagom-dives/roblecoco_icon_512.png",
+      "src": "./roblecoco_icon_512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
 
