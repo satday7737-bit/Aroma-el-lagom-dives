@@ -1,24 +1,14 @@
 {
   "name": "Aroma el lagom dives",
   "short_name": "Aroma",
-  "description": "아로마 상담·처방 차트",
+  "description": "고객 상담 차트",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#111111",
   "icons": [
-    {
-      "src": "./roblecoco_icon_192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "./roblecoco_icon_512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "./roblecoco_icon_192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./roblecoco_icon_512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
-
-
