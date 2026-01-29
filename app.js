@@ -1,15 +1,16 @@
 function isStandaloneMode() {
-  // iOS Safari 홈화면 추가 상태
   const iosStandalone = window.navigator.standalone === true;
-  // Android/Chrome PWA
   const mqlStandalone = window.matchMedia("(display-mode: standalone)").matches;
   return iosStandalone || mqlStandalone;
 }
-// ===============================
-// 0. 전역 & DOM 헬퍼
-// ===============================
-let currentClientRef = null; // 현재 선택/작업 중인 고객 문서 참조
-const programConfigMap = {}; // Firestore에서 불러온 프로그램 설정
+
+
+let currentClientRef = null; // 현재 선택/작업 중인 고객
+let currentPhoneDigits = ""; // 전화번호(숫자만) 캐시
+
+function normalizePhoneDigits(v) {
+  return (v || "").replace(/\D/g, "");
+}
 
 function $(id) {
   return document.getElementById(id);
@@ -17,545 +18,98 @@ function $(id) {
 
 function getValue(id) {
   const el = $(id);
-  return el ? el.value.trim() : "";
+  if (!el) return "";
+  return (el.value || "").trim();
 }
 
-function setText(id, text) {
-  const el = $(id);
-  if (el) el.textContent = text;
-}
-
-function formatDateTime(ts) {
-  if (!ts || !ts.toDate) return "-";
-  const d = ts.toDate();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  const h = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${y}-${m}-${day} ${h}:${min}`;
-}
-
-function formatKRW(num) {
-  if (num == null || isNaN(num)) return "";
-  return Math.round(num)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-// ===============================
-// 1. 오늘 날짜 표시
-// ===============================
 function setToday() {
-  const today = new Date();
-  const y = today.getFullYear();
-  const m = String(today.getMonth() + 1).padStart(2, "0");
-  const d = String(today.getDate()).padStart(2, "0");
-  setText("todayDisplay", `${y}-${m}-${d}`);
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  const el = $("todayDate");
+  if (el) el.textContent = `${yyyy}-${mm}-${dd}`;
 }
 
-// ===============================
-// 2. 증상별 EO 프리셋
-// ===============================
-const symptomEoPresets = {
-  pain: [
-    {
-      name: "로즈마리 ct.버베논",
-      effects: "근육통, 긴장성 두통, 혈행 촉진, 림프 순환",
-      dilution: "바디 1~2%, 국소 3% 이내",
-      caution: "고혈압·경련성 질환·임산부 주의",
-    },
-    {
-      name: "마조람 스위트",
-      effects: "근육 경직 완화, 요통, 복부 경련",
-      dilution: "바디 1.5~2.5%",
-      caution: "저혈압 고객 저농도 권장",
-    },
-  ],
-  edema: [
-    {
-      name: "시프러스",
-      effects: "림프·정맥 순환, 부종 완화",
-      dilution: "바디 1.5~2.5%",
-      caution: "임산부 장기 사용 피하기",
-    },
-    {
-      name: "주니퍼베리",
-      effects: "수분 정체·부종 완화",
-      dilution: "바디 1~2%",
-      caution: "신장 질환 고객 주의",
-    },
-  ],
-  fatigue: [
-    {
-      name: "스위트 오렌지",
-      effects: "피로 완화, 기분 전환",
-      dilution: "바디 1~2%",
-      caution: "햇빛 직전 고농도 사용 피함",
-    },
-    {
-      name: "로즈마리 시네올",
-      effects: "활력, 각성, 집중력",
-      dilution: "바디 1~2%",
-      caution: "고혈압 고객 저녁 사용 주의",
-    },
-  ],
-  stress: [
-    {
-      name: "라벤더",
-      effects: "긴장 완화, 진정",
-      dilution: "바디 1~2%",
-      caution: "라벤더 민감 고객 확인",
-    },
-    {
-      name: "버가못 FCF",
-      effects: "불안 완화, 무기력 개선",
-      dilution: "바디 1~2%",
-      caution: "일광 전 고농도 사용 주의",
-    },
-  ],
-  sleep: [
-    {
-      name: "라벤더",
-      effects: "수면 보조, 근육 이완",
-      dilution: "바디 1~2%",
-      caution: "",
-    },
-    {
-      name: "로만 캐모마일",
-      effects: "진정, 불안 완화",
-      dilution: "바디 1~2%",
-      caution: "국화과 알레르기 고객 확인",
-    },
-  ],
-  digest: [
-    {
-      name: "스위트 오렌지",
-      effects: "소화, 복부 팽만",
-      dilution: "바디 1~2%",
-      caution: "빛 노출 주의",
-    },
-    {
-      name: "진저",
-      effects: "복부 냉증, 소화 불편",
-      dilution: "바디 0.5~1.5%",
-      caution: "자극 가능성",
-    },
-  ],
-  hormone: [
-    {
-      name: "클라리 세이지",
-      effects: "PMS, 갱년기",
-      dilution: "바디 1~2%",
-      caution: "호르몬 의존성 질환 고객 피하기",
-    },
-    {
-      name: "제라늄",
-      effects: "호르몬 밸런스, 부종",
-      dilution: "바디 1~2%",
-      caution: "임신 초기 피하기",
-    },
-  ],
-  skin: [
-    {
-      name: "티트리",
-      effects: "여드름, 살균",
-      dilution: "페이스 0.5%, 바디 1~2%",
-      caution: "건성 피부 저농도",
-    },
-    {
-      name: "라벤더",
-      effects: "진정, 회복",
-      dilution: "페이스 0.5~1%",
-      caution: "",
-    },
-  ],
-  brain: [
-    {
-      name: "로즈마리 시네올",
-      effects: "집중력, 두통",
-      dilution: "바디 1~2%",
-      caution: "고혈압 고객 주의",
-    },
-    {
-      name: "페퍼민트",
-      effects: "두통, 각성",
-      dilution: "국소 1%",
-      caution: "임산부·수유부·어린이 금지",
-    },
-  ],
-  postpartum: [
-    {
-      name: "마조람",
-      effects: "산후 통증 완화",
-      dilution: "바디 1.5~2.5%",
-      caution: "저혈압 고객 주의",
-    },
-    {
-      name: "제라늄",
-      effects: "산후 부종·기분 완화",
-      dilution: "바디 1~2%",
-      caution: "",
-    },
-  ],
-};
 
-function renderEoRecommendations() {
+const programs = [
+  { id: "", name: "프로그램 선택", intervalDays: 0 },
+  { id: "bamboo_lymph", name: "온열뱀부 림프순환", intervalDays: 7 },
+  { id: "bamboo_detox", name: "온열뱀부 디톡스", intervalDays: 7 },
+  { id: "postpartum", name: "산후 골반·부종 케어", intervalDays: 7 },
+  { id: "brain_sleep", name: "브레인·수면 케어", intervalDays: 7 },
+];
+
+function renderPrograms() {
+  const sel = $("programSelect");
+  if (!sel) return;
+  sel.innerHTML = "";
+  programs.forEach((p) => {
+    const opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.name;
+    sel.appendChild(opt);
+  });
+}
+
+function getSelectedProgram() {
+  const id = getValue("programSelect");
+  return programs.find((p) => p.id === id) || programs[0];
+}
+
+
+function updateEoGuideBySymptoms() {
+  const symptoms = Array.from(
+    document.querySelectorAll('#symptomTags input[type="checkbox"]:checked')
+  ).map((el) => el.value);
+
+  const contra = Array.from(
+    document.querySelectorAll('#contraTags input[type="checkbox"]:checked')
+  ).map((el) => el.value);
+
   const box = $("eoRecommendations");
   if (!box) return;
 
-  const checked = document.querySelectorAll(
-    '#symptomTags input[type="checkbox"]:checked'
-  );
-  const keys = Array.from(checked).map((el) => el.value);
-
-  if (keys.length === 0) {
+  if (symptoms.length === 0) {
     box.innerHTML =
       '증상을 선택한 뒤 왼쪽의 <strong>“증상 기반 EO 추천 보기”</strong> 버튼을 눌러주세요.';
     return;
   }
 
-  let html = "";
-  keys.forEach((key) => {
-    const list = symptomEoPresets[key];
-    if (!list) return;
+  
+  const map = {
+    "스트레스/불안": ["라벤더", "베르가못", "프랑킨센스"],
+    "수면장애/불면": ["라벤더", "로만캐모마일", "샌달우드"],
+    "부종/림프정체": ["사이프러스", "그레이프프룻", "주니퍼베리"],
+    "근육통/결림/요통": ["마조람스위트", "진저", "블랙페퍼"],
+    "두통/집중저하/브레인": ["로즈마리", "페퍼민트", "레몬"],
+  };
 
-    html += `<div class="eo-section-title">[${key}] EO 가이드</div>`;
-
-    list.forEach((eo) => {
-      html += `
-        <div class="eo-card">
-          <div class="eo-name">${eo.name}</div>
-          <div class="eo-line"><strong>효능</strong>: ${eo.effects}</div>
-          <div class="eo-line"><strong>희석</strong>: ${eo.dilution}</div>
-          <div class="eo-line caution"><strong>주의</strong>: ${eo.caution}</div>
-        </div>`;
-    });
+  let oils = [];
+  symptoms.forEach((s) => {
+    if (map[s]) oils = oils.concat(map[s]);
   });
 
-  box.innerHTML = html;
+  oils = Array.from(new Set(oils));
+
+  const contraText =
+    contra.length > 0
+      ? `<div style="margin-top:8px" class="muted">주의사항 체크: ${contra.join(
+          ", "
+        )}</div>`
+      : "";
+
+  box.innerHTML = `
+    <div style="font-weight:800;margin-bottom:6px">추천 EO</div>
+    <div>${oils.join(" · ") || "선택된 증상에 대한 추천 데이터가 없습니다."}</div>
+    ${contraText}
+    <div style="margin-top:10px" class="muted">
+      실제 사용 여부/농도는 고객 상태에 따라 원장님이 최종 판단합니다.
+    </div>
+  `;
 }
 
-// ===============================
-// 3. 프로그램별 EO·제품 추천(이름 기준)
-// ===============================
-const programExtraByName = {
-  "제품 상담 및 테라피 상담": {
-    eo: [],
-    products: [],
-    notes: "1회 상담 전용. 프로그램 안내, 제품 상담 중심.",
-  },
-  "온열뱀부 풋 케어": {
-    eo: ["시프러스", "주니퍼베리"],
-    products: ["하체 슬림/부종 케어 오일", "풋 스크럽"],
-    notes: "하체 부종·냉증·피로에 초점.",
-  },
-  "온열뱀부 등 케어": {
-    eo: ["로즈마리", "마조람", "스위트 오렌지"],
-    products: ["등·경추 전용 바디오일"],
-    notes: "등·어깨·경추 긴장 완화, 스트레스 완화.",
-  },
-  "스페셜 풋 케어": {
-    eo: ["페퍼민트", "시프러스"],
-    products: ["풋 스크럽", "풋 전용 오일"],
-    notes: "각질+순환+피로 케어를 동시에.",
-  },
-  "경추 브레인 케어": {
-    eo: ["로즈마리 시네올", "프랑킨센스"],
-    products: ["두피·경추 브레인 오일"],
-    notes: "집중력·두통·뇌 피로 완화.",
-  },
-  "온열뱀부 복부 케어": {
-    eo: ["진저", "스위트 오렌지", "마조람"],
-    products: ["복부 전용 오일", "디톡스 솔트"],
-    notes: "복부 냉증·소화·호르몬 케어.",
-  },
-  "온열뱀부 기본 바디 케어": {
-    eo: ["라벤더", "로즈마리"],
-    products: ["전신 바디오일"],
-    notes: "전신 순환·피로 회복 기본 케어.",
-  },
-  "온열뱀부 바디 바디 케어": {
-    eo: ["자몽", "사이프러스", "로즈마리"],
-    products: ["슬리밍 바디오일", "디톡스 솔트"],
-    notes: "부종·셀룰라이트·몸무게 관리 집중.",
-  },
-  "온열뱀부 페이셜 케어": {
-    eo: ["라벤더", "제라늄", "프랑킨센스"],
-    products: ["페이셜 오일", "미백/재생 마스크"],
-    notes: "피부 밸런스·톤·재생 케어.",
-  },
-  "씨솔트바디디톡스": {
-    eo: ["자몽", "시프러스", "주니퍼베리"],
-    products: ["씨솔트 바디 스크럽"],
-    notes: "전신 디톡스·순환·각질 케어.",
-  },
-  "커피앤솔트슬림스크럽": {
-    eo: ["커피 CO2", "사이프러스", "자몽"],
-    products: ["커피앤씨솔트 슬림 스크럽"],
-    notes: "셀룰라이트·슬리밍 집중 바디 스크럽.",
-  },
-  "아사히베리미백, 재생": {
-    eo: ["프랑킨센스", "라벤더", "제라늄"],
-    products: ["아사이베리 미백/재생 크림"],
-    notes: "미백·탄력·재생에 초점.",
-  },
-  "산후관리 (premium)": {
-    eo: ["마조람", "제라늄", "라벤더"],
-    products: ["산후 골반/복부 케어 오일"],
-    notes: "산후 골반·부종·수면·감정 케어.",
-  },
-  "온열뱀부 침향 뜸": {
-    eo: ["침향", "프랑킨센스"],
-    products: ["침향 오일·좌훈/뜸 전용"],
-    notes: "심신 안정·깊은 이완·명상케어.",
-  },
-  "뉴로피드백 뇌파 검사": {
-    eo: [],
-    products: [],
-    notes: "검사 위주. 필요 시 브레인 케어와 연계.",
-  },
-};
 
-// ===============================
-// 4. 프로그램 설정 불러오기 (config_programs)
-// ===============================
-function getSelectedProgramConfig() {
-  const selectEl = $("programSelect");
-  if (!selectEl) return null;
-  const id = selectEl.value;
-  if (!id) return null;
-  return programConfigMap[id] || null;
-}
-
-async function initProgramSelect() {
-  const selectEl = $("programSelect");
-  const statusEl = $("programStatus");
-  if (!selectEl || typeof db === "undefined") return;
-
-  selectEl.innerHTML = '<option value="">프로그램 선택</option>';
-  if (statusEl) statusEl.textContent = "선택 전";
-
-  try {
-    const snap = await db.collection("config_programs").get();
-
-    snap.forEach((doc) => {
-      const data = doc.data();
-      const id = doc.id;
-
-      programConfigMap[id] = {
-        id,
-        name: data.name || id,
-        basePrice: Number(data.basePrice) || 0,
-        finalPrice:
-          Number(
-            data.finalPrice != null ? data.finalPrice : data.basePrice
-          ) || 0,
-        totalSessions: Number(data.totalSessions) || 0,
-        unitPrice: Number(data.unitPrice) || 0,
-        intervalDays: Number(data.intervalDays) || 0,
-        durationMinutes: Number(data.durationMinutes) || 0,
-      };
-
-      const opt = document.createElement("option");
-      opt.value = id;
-      opt.textContent = data.name || id;
-      selectEl.appendChild(opt);
-    });
-  } catch (err) {
-    console.error(err);
-    alert("프로그램 목록을 불러오는 중 오류가 발생했습니다.");
-  }
-}
-
-// 자동 계산 (정가/남은횟수/다음권장일)
-function recalcProgramPricing() {
-  const config = getSelectedProgramConfig();
-
-  const unitInput = $("sessionUnitPrice");
-  const totalInput = $("totalSessionsInput");
-  const baseInput = $("programBasePrice");
-  const finalInput = $("programFinalPrice");
-  const usedInput = $("usedSessionsInput");
-  const listDisplay = $("packageListPriceDisplay");
-  const remainingDisplay = $("remainingSessionsDisplay");
-  const nextDisplay = $("nextAppointmentDisplay");
-
-  let unit = unitInput && unitInput.value ? Number(unitInput.value) : NaN;
-  let total = totalInput && totalInput.value ? Number(totalInput.value) : NaN;
-  let used = usedInput && usedInput.value ? Number(usedInput.value) : 0;
-
-  if (config) {
-    if (!unit || isNaN(unit)) {
-      if (config.unitPrice) unit = config.unitPrice;
-      else if (config.basePrice && config.totalSessions) {
-        unit = config.basePrice / config.totalSessions;
-      }
-    }
-    if (!total || isNaN(total)) {
-      total = config.totalSessions || 0;
-    }
-  }
-
-  if (unitInput && (!unitInput.value || isNaN(Number(unitInput.value)))) {
-    if (unit) unitInput.value = Math.round(unit);
-  }
-  if (totalInput && (!totalInput.value || isNaN(Number(totalInput.value)))) {
-    if (total) totalInput.value = total;
-  }
-
-  const base =
-    unit && total && !isNaN(unit) && !isNaN(total) ? unit * total : NaN;
-
-  if (baseInput && (isNaN(Number(baseInput.value)) || !baseInput.value)) {
-    if (!isNaN(base)) baseInput.value = Math.round(base);
-  }
-
-  if (finalInput && !finalInput.value) {
-    if (config && config.finalPrice) finalInput.value = config.finalPrice;
-    else if (!isNaN(base)) finalInput.value = Math.round(base);
-  }
-
-  if (listDisplay) {
-    if (!isNaN(base) && unit && total) {
-      listDisplay.textContent = `예: ${formatKRW(
-        unit
-      )}원 × ${total}회 = ${formatKRW(base)}원 (정가 기준)`;
-    } else {
-      listDisplay.textContent =
-        "예: 180,000원 × 10회 = 1,800,000원 (정가 기준)";
-    }
-  }
-
-  if (remainingDisplay && total) {
-    const remaining = total - (isNaN(used) ? 0 : used);
-    if (!isNaN(remaining)) {
-      remainingDisplay.textContent = `${remaining} 회 (오늘 방문 전 기준)`;
-    } else {
-      remainingDisplay.textContent = "-";
-    }
-  }
-
-  if (nextDisplay) {
-    const interval = config && config.intervalDays ? config.intervalDays : 0;
-    if (interval > 0) {
-      const d = new Date();
-      d.setDate(d.getDate() + interval);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      nextDisplay.textContent = `${y}-${m}-${day}`;
-    } else {
-      nextDisplay.textContent = "-";
-    }
-  }
-}
-
-// 프로그램 선택 시 EO/제품 추천 + 기본값 세팅
-function updateProgramRecommendations() {
-  const box = $("programProductRecommendations");
-  const statusEl = $("programStatus");
-  if (!box) return;
-
-  const config = getSelectedProgramConfig();
-
-  if (!config) {
-    if (statusEl) statusEl.textContent = "선택 전";
-    box.innerHTML =
-      "관리 프로그램을 선택하면, 해당 프로그램에 최적화된 EO 세트와 로블코코/엘라곰 제품 추천 리스트가 표시됩니다.";
-    recalcProgramPricing();
-    return;
-  }
-
-  if (statusEl) statusEl.textContent = `선택됨: ${config.name}`;
-
-  const extra = programExtraByName[config.name] || {};
-  const durationText = config.durationMinutes
-    ? `${config.durationMinutes}분`
-    : "";
-
-  let html = '<div class="eo-card">';
-  if (durationText) {
-    html += `<div class="eo-line"><strong>소요시간</strong>: ${durationText}</div>`;
-  }
-  const priceForView = config.unitPrice || config.basePrice;
-  if (priceForView) {
-    html += `<div class="eo-line"><strong>1회 금액</strong>: ${formatKRW(
-      priceForView
-    )}원</div>`;
-  }
-  if (extra.eo && extra.eo.length) {
-    html += `<div class="eo-line"><strong>추천 EO</strong>: ${extra.eo.join(
-      " / "
-    )}</div>`;
-  }
-  if (extra.products && extra.products.length) {
-    html += `<div class="eo-line"><strong>추천 제품</strong>: ${extra.products.join(
-      " / "
-    )}</div>`;
-  }
-  if (extra.notes) {
-    html += `<div class="small-muted">${extra.notes}</div>`;
-  }
-  html += "</div>";
-
-  box.innerHTML = html;
-
-  // 입력 필드 기본값 세팅
-  if ($("sessionUnitPrice") && !$("sessionUnitPrice").value && config.unitPrice)
-    $("sessionUnitPrice").value = config.unitPrice;
-  if ($("totalSessionsInput") && !$("totalSessionsInput").value && config.totalSessions)
-    $("totalSessionsInput").value = config.totalSessions;
-  if ($("programBasePrice") && !$("programBasePrice").value && config.basePrice)
-    $("programBasePrice").value = config.basePrice;
-  if (
-    $("programFinalPrice") &&
-    !$("programFinalPrice").value &&
-    config.finalPrice
-  )
-    $("programFinalPrice").value = config.finalPrice;
-
-  recalcProgramPricing();
-}
-
-// ===============================
-// 5. 사진 미리보기
-// ===============================
-function handlePhotoPreview(inputId, previewId) {
-  const input = $(inputId);
-  const preview = $(previewId);
-  if (!input || !preview) return;
-
-  const file = input.files[0];
-  if (!file) {
-    preview.textContent = "이미지를 선택해주세요.";
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    preview.innerHTML = `<img src="${e.target.result}" />`;
-  };
-  reader.readAsDataURL(file);
-}
-
-// ===============================
-// 6. Firebase 업로드
-// ===============================
-async function uploadPhotoIfExists(id, folder, clientId) {
-  const input = $(id);
-  if (!input || !input.files || !input.files[0]) return null;
-  if (typeof storage === "undefined") return null;
-
-  const file = input.files[0];
-  const ref = storage.ref(`${folder}/${clientId}/${Date.now()}_${file.name}`);
-  await ref.put(file);
-  return await ref.getDownloadURL();
-}
-
-// ===============================
-// 7. 고객 생성/업데이트
-// ===============================
 async function getOrCreateClient() {
   if (typeof db === "undefined") {
     alert("Firebase 설정을 먼저 확인해주세요.");
@@ -563,9 +117,10 @@ async function getOrCreateClient() {
   }
 
   const name = getValue("clientName");
-  const phone = getValue("clientPhone");
+  const phoneRaw = getValue("clientPhone");
+  const phoneDigits = normalizePhoneDigits(phoneRaw);
 
-  if (!name || !phone) {
+  if (!name || !phoneDigits) {
     alert("이름과 전화번호는 필수입니다.");
     throw new Error("missing name/phone");
   }
@@ -576,7 +131,7 @@ async function getOrCreateClient() {
 
   let snap = await db
     .collection("clients")
-    .where("phone", "==", phone)
+    .where("phoneDigits", "==", phoneDigits)
     .limit(1)
     .get();
 
@@ -584,19 +139,22 @@ async function getOrCreateClient() {
     const ref = snap.docs[0].ref;
     await ref.update({
       name,
-      phone,
+      phone: phoneRaw,
+      phoneDigits,
       ageRange,
       constitution,
       clientNote,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
     currentClientRef = ref;
+    currentPhoneDigits = phoneDigits;
     return ref;
   }
 
   const ref = await db.collection("clients").add({
     name,
-    phone,
+    phone: phoneRaw,
+    phoneDigits,
     ageRange,
     constitution,
     clientNote,
@@ -604,12 +162,77 @@ async function getOrCreateClient() {
   });
 
   currentClientRef = ref;
+  currentPhoneDigits = phoneDigits;
   return ref;
 }
 
-// ===============================
-// 8. 상담 저장
-// ===============================
+async function searchClient() {
+  const keyword = getValue("searchKeyword");
+  if (!keyword) {
+    alert("검색어를 입력해주세요. (전화번호 또는 이름 전체)");
+    return;
+  }
+  if (typeof db === "undefined") {
+    alert("Firebase 설정을 먼저 확인해주세요.");
+    return;
+  }
+
+  const digits = normalizePhoneDigits(keyword);
+
+  let query = db.collection("clients");
+  if (digits.length >= 9) {
+    query = query.where("phoneDigits", "==", digits);
+  } else {
+    query = query.where("name", "==", keyword.trim());
+  }
+
+  const snap = await query.limit(1).get();
+  if (snap.empty) {
+    alert(
+      "해당 고객을 찾지 못했습니다. 새 고객으로 등록 후 저장하면 자동으로 생성됩니다."
+    );
+    currentClientRef = null;
+    currentPhoneDigits = "";
+    return;
+  }
+
+  const doc = snap.docs[0];
+  const data = doc.data();
+
+  $("clientName").value = data.name || "";
+  $("clientPhone").value = data.phone || "";
+  $("ageRangeSelect").value = data.ageRange || "";
+  $("clientConstitution").value = data.constitution || "";
+  $("clientNote").value = data.clientNote || "";
+
+  currentClientRef = doc.ref;
+  currentPhoneDigits = data.phoneDigits || normalizePhoneDigits(data.phone || "");
+
+  // 검색 후 자동으로 마지막 상담을 폼에 채움
+  await loadLastSession();
+
+  alert("고객 정보를 불러왔습니다.");
+}
+
+
+async function uploadPhotoIfExists(inputId, prefix, clientId) {
+  const input = $(inputId);
+  if (!input || !input.files || input.files.length === 0) return "";
+
+  if (typeof storage === "undefined") {
+    console.warn("storage undefined");
+    return "";
+  }
+
+  const file = input.files[0];
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const path = `before_after/${clientId}/${prefix}_${Date.now()}.${ext}`;
+  const ref = storage.ref().child(path);
+  await ref.put(file);
+  return await ref.getDownloadURL();
+}
+
+
 async function saveSession() {
   try {
     const clientRef = await getOrCreateClient();
@@ -620,6 +243,8 @@ async function saveSession() {
 
     const data = {
       clientRef,
+      clientId: clientRef.id,
+      phoneDigits: currentPhoneDigits || "",
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       visitReason: getValue("visitReason"),
       symptoms,
@@ -628,6 +253,9 @@ async function saveSession() {
       sessionProducts: getValue("sessionProducts"),
       eoRecipeNote: getValue("eoRecipeNote"),
       sessionNextPlan: getValue("sessionNextPlan"),
+      contraTags: Array.from(
+        document.querySelectorAll('#contraTags input[type="checkbox"]:checked')
+      ).map((el) => el.value),
     };
 
     data.beforePhotoUrl = await uploadPhotoIfExists(
@@ -646,83 +274,11 @@ async function saveSession() {
     alert("오늘 상담 내용이 저장되었습니다.");
   } catch (e) {
     console.error(e);
-    alert("상담 내용을 저장하는 중 오류가 발생했습니다.");
+    alert("저장 중 오류가 발생했습니다. 콘솔(F12)을 확인해주세요.");
   }
 }
 
-// ===============================
-// 9. 고객 검색
-// ===============================
-async function searchClient() {
-  const keyword = getValue("searchKeyword");
-  if (!keyword) {
-    alert("검색어를 입력해주세요. (전화번호 또는 이름 전체)");
-    return;
-  }
-  if (typeof db === "undefined") {
-    alert("Firebase 설정을 먼저 확인해주세요.");
-    return;
-  }
-
-  let query = db.collection("clients");
-  if (keyword.includes("010") || keyword.includes("-") || /^[0-9]+$/.test(keyword)) {
-    query = query.where("phone", "==", keyword);
-  } else {
-    query = query.where("name", "==", keyword);
-  }
-
-  const snap = await query.limit(1).get();
-  if (snap.empty) {
-    alert(
-      "해당 고객을 찾지 못했습니다. 새 고객으로 등록 후 저장하면 자동으로 생성됩니다."
-    );
-    currentClientRef = null;
-    return;
-  }
-
-  const doc = snap.docs[0];
-  const data = doc.data();
-
-  $("clientName").value = data.name || "";
-  $("clientPhone").value = data.phone || "";
-  $("ageRangeSelect").value = data.ageRange || "";
-  $("clientConstitution").value = data.constitution || "";
-  $("clientNote").value = data.clientNote || "";
-
-  currentClientRef = doc.ref;
-
-  alert("고객 정보를 불러왔습니다.");
-}
-
-// ===============================
-// 10. 리포트 생성 & PDF
-// ===============================
-function generateReportPreview() {
-  const symptomLabels = Array.from(
-    document.querySelectorAll('#symptomTags input[type="checkbox"]:checked')
-  ).map((el) => el.parentElement.textContent.trim());
-
-  const lines = [];
-  lines.push(`고객명: ${getValue("clientName")} (${getValue("ageRangeSelect")})`);
-  lines.push(`연락처: ${getValue("clientPhone")}`);
-  lines.push("");
-  lines.push(`오늘 컨디션: ${getValue("visitReason")}`);
-  lines.push(`주요 증상: ${symptomLabels.join(", ") || "-"}`);
-  lines.push("");
-  lines.push(`프로그램: ${getValue("programSelect")}`);
-  lines.push(`시술 내용: ${getValue("sessionTechniques")}`);
-  lines.push(`사용 제품: ${getValue("sessionProducts")}`);
-  lines.push("");
-  lines.push("다음 계획:");
-  lines.push(getValue("sessionNextPlan"));
-
-  const box = $("autoReport");
-  if (box) box.textContent = lines.join("\n");
-
-  alert("자동 상담 리포트가 생성되었습니다.");
-}
-
-async function generateSummaryReport() {
+async function loadLastSession() {
   if (!currentClientRef) {
     alert("먼저 고객을 선택하거나 저장해주세요.");
     return;
@@ -734,198 +290,160 @@ async function generateSummaryReport() {
 
   const snap = await db
     .collection("sessions")
-    .where("clientRef", "==", currentClientRef)
-    .orderBy("createdAt", "asc")
+    .where("clientId", "==", currentClientRef.id)
+    .orderBy("createdAt", "desc")
+    .limit(1)
     .get();
 
-  const box = $("autoReport");
+  if (snap.empty) {
+    alert("최근 상담 기록이 없습니다.");
+    return;
+  }
+
+  const d = snap.docs[0].data();
+
+  $("visitReason").value = d.visitReason || "";
+  $("sessionTechniques").value = d.sessionTechniques || "";
+  $("sessionProducts").value = d.sessionProducts || "";
+  $("eoRecipeNote").value = d.eoRecipeNote || "";
+  $("sessionNextPlan").value = d.sessionNextPlan || "";
+  if ($("programSelect")) $("programSelect").value = d.program || "";
+
+  
+  const selected = new Set(d.symptoms || []);
+  document.querySelectorAll('#symptomTags input[type="checkbox"]').forEach((el) => {
+    el.checked = selected.has(el.value);
+  });
+
+ 
+  const contraSelected = new Set(d.contraTags || []);
+  document.querySelectorAll('#contraTags input[type="checkbox"]').forEach((el) => {
+    el.checked = contraSelected.has(el.value);
+  });
+
+  updateEoGuideBySymptoms();
+
+  alert("최근 상담 내용을 불러왔습니다.");
+}
+
+
+function generateReportPreview() {
+  const box = $("reportPreview");
   if (!box) return;
 
-  if (snap.empty) {
-    box.textContent = "누적 상담 기록이 없습니다.";
+  const name = getValue("clientName");
+  const phone = getValue("clientPhone");
+  const visitReason = getValue("visitReason");
+
+  const symptoms = Array.from(
+    document.querySelectorAll('#symptomTags input[type="checkbox"]:checked')
+  ).map((el) => el.value);
+
+  const program = getSelectedProgram();
+
+  box.innerHTML = `
+    <div style="font-weight:900;margin-bottom:8px">상담 요약</div>
+    <div>고객: <strong>${name || "-"}</strong> / ${phone || "-"}</div>
+    <div style="margin-top:8px"><strong>오늘 컨디션</strong><br/>${(visitReason || "-").replace(
+      /\n/g,
+      "<br/>"
+    )}</div>
+    <div style="margin-top:8px"><strong>증상</strong><br/>${
+      symptoms.length ? symptoms.join(" · ") : "-"
+    }</div>
+    <div style="margin-top:8px"><strong>프로그램</strong><br/>${
+      program?.name || "-"
+    }</div>
+    <div style="margin-top:10px" class="muted">
+      이 리포트는 설명용 요약입니다. 실제 적용은 원장 판단 기준입니다.
+    </div>
+  `;
+}
+
+async function generateSummaryReport() {
+  if (!currentClientRef) {
+    alert("먼저 고객을 검색하거나 저장해주세요.");
+    return;
+  }
+  if (typeof db === "undefined") {
+    alert("Firebase 설정을 먼저 확인해주세요.");
     return;
   }
 
-  let count = 0;
-  let first = null;
-  let last = null;
-  const programCount = {};
-  const symptomCount = {};
+  try {
+    const snap = await db
+      .collection("sessions")
+      .where("clientId", "==", currentClientRef.id)
+      .orderBy("createdAt", "asc")
+      .get();
 
-  snap.forEach((doc) => {
-    const d = doc.data();
-    count++;
-    if (!first) first = d.createdAt;
-    last = d.createdAt;
+    if (snap.empty) {
+      alert("누적 상담 기록이 없습니다.");
+      return;
+    }
 
-    if (d.program)
-      programCount[d.program] = (programCount[d.program] || 0) + 1;
-
-    (d.symptoms || []).forEach((s) => {
-      symptomCount[s] = (symptomCount[s] || 0) + 1;
+    let html = `<div style="font-weight:900;margin-bottom:10px">누적 상담 리포트 (최근~과거)</div>`;
+    snap.docs.forEach((doc, idx) => {
+      const d = doc.data();
+      const symptoms = (d.symptoms || []).join(" · ");
+      html += `
+        <div style="border-top:1px dashed rgba(0,0,0,0.15);padding-top:10px;margin-top:10px">
+          <div style="font-weight:800">${idx + 1}회차</div>
+          <div class="muted">증상: ${symptoms || "-"}</div>
+          <div class="muted">시술: ${(d.sessionTechniques || "-").replace(/\n/g, "<br/>")}</div>
+          <div class="muted">제품: ${(d.sessionProducts || "-").replace(/\n/g, "<br/>")}</div>
+          <div class="muted">레시피: ${(d.eoRecipeNote || "-").replace(/\n/g, "<br/>")}</div>
+          <div class="muted">다음계획: ${(d.sessionNextPlan || "-").replace(/\n/g, "<br/>")}</div>
+        </div>
+      `;
     });
-  });
 
-  const topPrograms = Object.entries(programCount)
-    .sort((a, b) => b[1] - a[1])
-    .map(([k, v]) => `${k} (${v}회)`)
-    .slice(0, 3);
+    const box = $("reportPreview");
+    if (box) box.innerHTML = html;
 
-  const topSymptoms = Object.entries(symptomCount)
-    .sort((a, b) => b[1] - a[1])
-    .map(([k, v]) => `${k} (${v}회)`)
-    .slice(0, 3);
-
-  const lines = [];
-  lines.push("■ 누적 상담 리포트");
-  lines.push("");
-  lines.push(`총 방문 횟수: ${count}회`);
-  lines.push(
-    `첫 방문: ${formatDateTime(first)} / 마지막 방문: ${formatDateTime(last)}`
-  );
-  lines.push("");
-  lines.push(`자주 진행한 프로그램: ${topPrograms.join(", ") || "-"}`);
-  lines.push(`자주 호소한 증상: ${topSymptoms.join(", ") || "-"}`);
-  lines.push("");
-  lines.push("이력을 기반으로 프로그램·홈케어를 조정해 주세요.");
-
-  box.textContent = lines.join("\n");
+    alert("누적 상담 리포트를 생성했습니다.");
+  } catch (e) {
+    console.error(e);
+    alert("누적 리포트 생성 중 오류. 콘솔(F12)을 확인해주세요.");
+  }
 }
 
-function downloadReportPdf() {
-  if (!window.jspdf || !window.jspdf.jsPDF) {
-    alert("PDF 라이브러리가 로드되지 않았습니다.");
-    return;
+async function downloadReportPdf() {
+  try {
+    const box = $("reportPreview");
+    if (!box) return;
+    const text = box.innerText || "리포트 내용 없음";
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      unit: "pt",
+      format: "a4",
+    });
+
+    const lines = doc.splitTextToSize(text, 520);
+    doc.text(lines, 40, 60);
+    doc.save("consult_report.pdf");
+  } catch (e) {
+    console.error(e);
+    alert("PDF 다운로드 중 오류. 콘솔(F12)을 확인해주세요.");
   }
-
-  const box = $("autoReport");
-  if (!box) {
-    alert("리포트 영역이 없습니다.");
-    return;
-  }
-
-  const text = box.textContent || "";
-  if (!text.trim()) {
-    alert("리포트 내용이 없습니다.");
-    return;
-  }
-
-  const doc = new window.jspdf.jsPDF();
-  const lines = doc.splitTextToSize(text, 180);
-  doc.text(lines, 15, 20);
-
-  const name = getValue("clientName") || "client";
-  doc.save(`consult_${name}.pdf`);
 }
 
-// ===============================
-// 11. 초기 실행
-// ===============================
+
+function registerSW() {
+  if (!("serviceWorker" in navigator)) return;
+  // GitHub Pages/https/localhost 환경에서만 정상
+  navigator.serviceWorker
+    .register("./sw.js", { scope: "./" })
+    .catch((err) => console.warn("Service worker registration failed:", err));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   setToday();
-  initProgramSelect();
-
-  const programSelect = $("programSelect");
-  if (programSelect) {
-    programSelect.addEventListener("change", updateProgramRecommendations);
-  }
-
-  const unitInput = $("sessionUnitPrice");
-  const totalInput = $("totalSessionsInput");
-  const usedInput = $("usedSessionsInput");
-
-  if (unitInput) {
-    unitInput.addEventListener("change", recalcProgramPricing);
-    unitInput.addEventListener("keyup", recalcProgramPricing);
-  }
-  if (totalInput) {
-    totalInput.addEventListener("change", recalcProgramPricing);
-    totalInput.addEventListener("keyup", recalcProgramPricing);
-  }
-  if (usedInput) {
-    usedInput.addEventListener("change", recalcProgramPricing);
-    usedInput.addEventListener("keyup", recalcProgramPricing);
-  }
-
-  const beforeInput = $("beforePhotoInput");
-  if (beforeInput) {
-    beforeInput.addEventListener("change", () =>
-      handlePhotoPreview("beforePhotoInput", "beforePhotoPreview")
-    );
-  }
-  const afterInput = $("afterPhotoInput");
-  if (afterInput) {
-    afterInput.addEventListener("change", () =>
-      handlePhotoPreview("afterPhotoInput", "afterPhotoPreview")
-    );
-  }
+  renderPrograms();
+  registerSW();
 });
-// PWA 설치를 위한 서비스워커 등록
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("./sw.js")
-      .catch((err) => console.log("Service worker registration failed:", err));
-  });
-}
-function isStandaloneMode() {
-  // iOS Safari (홈화면 추가)
-  const iosStandalone = window.navigator.standalone === true;
 
-  // Android/Chrome PWA
-  const mqlStandalone = window.matchMedia("(display-mode: standalone)").matches;
-
-  return iosStandalone || mqlStandalone;
-}
-
-window.addEventListener("load", () => {
-  const standalone = isStandaloneMode();
-
-  // 앱 모드 배지
-  const appBadge = document.getElementById("appModeBadge");
-  if (appBadge) appBadge.style.display = standalone ? "inline-flex" : "none";
-
-  // 웹에서만 보이는 안내
-  const webHint = document.getElementById("webOnlyHint");
-  if (webHint) webHint.style.display = standalone ? "none" : "block";
-});
-function applyModeUI() {
-  const standalone = isStandaloneMode();
-
-  document.querySelectorAll(".web-only").forEach(el => {
-    el.style.display = standalone ? "none" : "";
-  });
-
-  document.querySelectorAll(".app-only").forEach(el => {
-    el.style.display = standalone ? "" : "none";
-  });
-}
-
-window.addEventListener("load", applyModeUI);
-function lockBackNavigationInApp() {
-  if (!isStandaloneMode()) return;
-
-  // 현재 페이지를 히스토리에 고정
-  history.pushState({ app: true }, "", location.href);
-
-  window.addEventListener("popstate", () => {
-    const ok = confirm("앱을 종료하시겠습니까?");
-    if (ok) {
-      // 종료(뒤로 허용)
-      history.back();
-    } else {
-      // 종료 취소 → 다시 현재 상태 유지
-      history.pushState({ app: true }, "", location.href);
-    }
-  });
-}
-
-window.addEventListener("load", () => {
-  setToday();
-  
-  applyModeUI();
-  lockBackNavigationInApp(); // 
-});
 
 
 
