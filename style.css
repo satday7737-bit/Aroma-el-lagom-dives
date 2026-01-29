@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -15,16 +13,8 @@ header {
   color: #f5f0ea;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 22px;
-}
-
-header p {
-  margin: 4px 0 0;
-  font-size: 13px;
-  opacity: 0.8;
-}
+header h1 { margin: 0; font-size: 22px; }
+header p { margin: 4px 0 0; font-size: 13px; opacity: 0.8; }
 
 .tabs {
   display: flex;
@@ -41,30 +31,18 @@ header p {
   font-size: 14px;
 }
 
-tab-button.active {
+
+.tab-button.active {
   border-bottom: 3px solid #222;
   font-weight: 600;
   background: #f0e7db;
 }
 
-main {
-  padding: 16px 24px 40px;
-}
+main { padding: 16px 24px 40px; }
 
-.section-header {
-  margin-bottom: 12px;
-}
-
-.section-header h2 {
-  margin: 0 0 4px;
-  font-size: 18px;
-}
-
-.section-header p {
-  margin: 0;
-  font-size: 13px;
-  color: #555;
-}
+.section-header { margin-bottom: 12px; }
+.section-header h2 { margin: 0 0 4px; font-size: 18px; }
+.section-header p { margin: 0; font-size: 13px; color: #555; }
 
 .current-client {
   margin-bottom: 16px;
@@ -74,18 +52,10 @@ main {
   border: 1px solid #e2d5c3;
 }
 
-.current-client h2 {
-  margin: 0 0 8px;
-  font-size: 16px;
-}
+.current-client h2 { margin: 0 0 8px; font-size: 16px; }
 
-.tab-section {
-  display: none;
-}
-
-.tab-section.active {
-  display: block;
-}
+.tab-section { display: none; }
+.tab-section.active { display: block; }
 
 .grid-2 {
   display: grid;
@@ -94,9 +64,7 @@ main {
 }
 
 @media (max-width: 900px) {
-  .grid-2 {
-    grid-template-columns: 1fr;
-  }
+  .grid-2 { grid-template-columns: 1fr; }
 }
 
 .card {
@@ -106,20 +74,11 @@ main {
   border: 1px solid #e2d5c3;
 }
 
-.card h3 {
-  margin: 0 0 10px;
-  font-size: 15px;
-}
+.card h3 { margin: 0 0 10px; font-size: 15px; }
 
-label {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 8px;
-}
+label { display: block; font-size: 13px; margin-bottom: 8px; }
 
-label input,
-label textarea,
-label select {
+label input, label textarea, label select {
   width: 100%;
   margin-top: 4px;
   padding: 6px 8px;
@@ -128,9 +87,7 @@ label select {
   font-size: 13px;
 }
 
-textarea {
-  resize: vertical;
-}
+textarea { resize: vertical; }
 
 button {
   margin-top: 8px;
@@ -143,9 +100,7 @@ button {
   font-size: 13px;
 }
 
-button:hover {
-  opacity: 0.9;
-}
+button:hover { opacity: 0.9; }
 
 table {
   width: 100%;
@@ -153,20 +108,14 @@ table {
   font-size: 12px;
 }
 
-th,
-td {
+th, td {
   padding: 6px 4px;
   border-bottom: 1px solid #eee;
   text-align: left;
 }
 
-th {
-  background: #f7efe5;
-}
-
-tr:hover {
-  background: #faf6f0;
-}
+th { background: #f7efe5; }
+tr:hover { background: #faf6f0; }
 
 input#clientSearch {
   width: 100%;
@@ -177,17 +126,9 @@ input#clientSearch {
   font-size: 13px;
 }
 
-footer {
-  padding: 12px 24px;
-  font-size: 11px;
-  color: #777;
-}
-
-/* 앱/웹 모드 전용 UI 제어 */
-.app-only {
-  display: none;
-}
+footer { padding: 12px 24px; font-size: 11px; color: #777; }
 
 .web-only {
   display: block;
 }
+
