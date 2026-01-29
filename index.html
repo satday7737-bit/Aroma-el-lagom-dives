@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- 앱 아이콘 & PWA 설정 -->
-<link rel="icon" href="roblecoco_icon_192.png">
-<link rel="apple-touch-icon" href="roblecoco_icon_512.png">
-<link rel="manifest" href="manifest.json">
+    <link rel="icon" href="./roblecoco_icon_192.png" />
+    <link rel="apple-touch-icon" href="./roblecoco_icon_512.png" />
+    <link rel="manifest" href="./manifest.json" />
     <meta name="theme-color" content="#000000" />
 
     <style>
@@ -28,985 +28,507 @@
       .app-shell {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 16px;
+        padding: 24px 18px 60px;
       }
 
-      .app-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
+      .title {
+        font-size: 30px;
+        letter-spacing: 0.06em;
+        margin: 0;
       }
 
-      .app-subtitle {
-        font-size: 0.85rem;
-        color: #7d6b52;
-        margin-bottom: 16px;
+      .subtitle {
+        margin-top: 8px;
+        opacity: 0.75;
       }
 
       .top-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 12px;
-      }
-
-      .top-bar-left {
+        margin-top: 18px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
-      .brand-badge {
-        padding: 4px 10px;
+      .brand-pill {
+        background: #1f1b16;
+        color: #f7f1e7;
+        padding: 8px 14px;
         border-radius: 999px;
-        background: #2d2620;
-        color: #f9f3eb;
-        font-size: 0.78rem;
+        font-weight: 700;
         letter-spacing: 0.08em;
-      }
-
-      .today-chip {
-        padding: 4px 10px;
-        border-radius: 999px;
-        border: 1px solid #d3c3aa;
-        font-size: 0.78rem;
-        background: rgba(255, 255, 255, 0.7);
-      }
-
-      .top-bar-right {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.8rem;
-        color: #7b6a52;
+        font-size: 14px;
       }
 
       .pill {
-        padding: 3px 8px;
+        background: #fff9f0;
+        border: 1px solid rgba(43, 34, 21, 0.18);
+        padding: 8px 14px;
         border-radius: 999px;
-        border: 1px solid #d5c9b5;
-        background: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
       }
 
       .layout {
+        margin-top: 18px;
         display: grid;
-        grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
-        gap: 14px;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 16px;
       }
 
       @media (max-width: 960px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .top-bar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .top-bar-right {
-    display: flex;
-    flex-direction: row;      
-    justify-content: flex-start;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: nowrap;         
-    overflow-x: auto;         
-  }
-
-  .pill {
-    white-space: nowrap;       
-    flex-shrink: 0;            
-  }
-}
-
-
-        .top-bar {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .top-bar-right {
-          align-self: stretch;
-          justify-content: space-between;
+        .layout {
+          grid-template-columns: 1fr;
         }
       }
 
       .card {
-        background: rgba(255, 255, 255, 0.94);
-        border-radius: 14px;
-        padding: 14px 14px 16px;
-        box-shadow: 0 10px 30px rgba(57, 39, 12, 0.08);
-        border: 1px solid rgba(218, 201, 174, 0.8);
-      }
-
-      .card + .card {
-        margin-top: 10px;
-      }
-
-      .card-header-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 6px;
+        background: #fff;
+        border: 1px solid rgba(43, 34, 21, 0.18);
+        border-radius: 22px;
+        padding: 18px;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.05);
       }
 
       .card-title {
-        font-size: 0.9rem;
-        font-weight: 600;
+        font-weight: 800;
         letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #756147;
+        font-size: 18px;
       }
 
       .card-caption {
-        font-size: 0.75rem;
-        color: #9b8463;
+        margin-top: 6px;
+        opacity: 0.7;
+        font-size: 13px;
       }
 
-      .section-title {
-        font-size: 0.86rem;
-        font-weight: 600;
-        margin: 8px 0 4px;
-        color: #4d3b28;
-      }
-
-      .field-row {
+      .grid2 {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      @media (max-width: 720px) {
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
         margin-bottom: 6px;
       }
 
-      .field {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .field-label {
-        font-size: 0.76rem;
-        color: #7b6a52;
-      }
-
-      .field-label.small {
-        font-size: 0.7rem;
-      }
-
-      .field-note {
-        font-size: 0.7rem;
-        color: #a08861;
-      }
-
-      input[type="text"],
-      input[type="tel"],
-      input[type="number"],
-      input[type="date"],
+      input,
       select,
       textarea {
         width: 100%;
-        padding: 6px 8px;
-        border-radius: 8px;
-        border: 1px solid #d6c6af;
-        font-size: 0.8rem;
-        font-family: inherit;
-        background: rgba(255, 255, 255, 0.95);
-        color: #2b2215;
+        padding: 12px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(43, 34, 21, 0.22);
+        background: #fffdf8;
+        outline: none;
+        font-size: 15px;
       }
 
       textarea {
-        min-height: 80px;
+        min-height: 84px;
         resize: vertical;
       }
 
-      input::placeholder,
-      textarea::placeholder {
-        color: #c1ae8c;
+      .muted {
+        opacity: 0.75;
+        font-size: 13px;
       }
 
-      .small-row {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-        margin-bottom: 4px;
-        flex-wrap: wrap;
+      .section-title {
+        margin-top: 16px;
+        font-weight: 900;
+        font-size: 16px;
       }
 
-      .tag-group {
+      .divider {
+        margin: 14px 0;
+        border-top: 1px dashed rgba(43, 34, 21, 0.24);
+      }
+
+      .tagbox {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px;
-        margin-top: 2px;
+        gap: 10px;
+        margin-top: 8px;
       }
 
       .tag {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
+        gap: 8px;
+        padding: 8px 12px;
         border-radius: 999px;
-        padding: 3px 7px;
-        font-size: 0.7rem;
-        border: 1px solid #d0c1a9;
-        background: #fdf7ee;
-        cursor: pointer;
+        border: 1px dashed rgba(43, 34, 21, 0.22);
+        background: #fff7ef;
+        font-size: 14px;
       }
 
       .tag input {
-        accent-color: #b7904a;
+        width: 18px;
+        height: 18px;
       }
 
-      .tag.negative {
-        border-style: dashed;
-        border-color: #d6b7b7;
-        background: #fdf1f1;
+      .tag.green {
+        background: #eff9f1;
+        border-color: rgba(35, 105, 55, 0.25);
       }
 
-      .tag.positive {
-        border-color: #b0d1b8;
-        background: #f1faf3;
+      .tag.red {
+        background: #fff1f1;
+        border-color: rgba(155, 35, 35, 0.25);
       }
 
-      .hint-box {
-        font-size: 0.74rem;
-        color: #8a7456;
-        background: #fbf3e6;
-        border-radius: 10px;
-        padding: 6px 8px;
-        border: 1px dashed #d2c0a4;
-        margin-top: 4px;
+      .helper-box {
+        background: #fff7ea;
+        border: 1px dashed rgba(43, 34, 21, 0.18);
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 13px;
+        margin-top: 10px;
       }
 
-      .hint-box strong {
-        color: #5d4528;
-      }
-
-      .divider {
-        border: none;
-        border-top: 1px dashed #e0d1bb;
-        margin: 8px 0;
-      }
-
-      .muted {
-        font-size: 0.74rem;
-        color: #a08c6c;
-      }
-
-      .muted strong {
-        color: #6b5335;
-      }
-
-      .inline-note {
-        font-size: 0.7rem;
-        color: #aa9371;
-      }
-
-      .button-row {
+      .btn-row {
         display: flex;
+        gap: 10px;
         flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 8px;
+        margin-top: 14px;
       }
 
       .btn {
-        padding: 6px 10px;
+        padding: 12px 16px;
         border-radius: 999px;
-        border: none;
-        font-size: 0.78rem;
+        border: 1px solid rgba(43, 34, 21, 0.22);
+        background: #fff;
         cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        letter-spacing: 0.03em;
+        font-weight: 800;
+        letter-spacing: 0.02em;
       }
 
       .btn-primary {
-        background: linear-gradient(135deg, #2f2520, #4b3829);
-        color: #fdf6ec;
+        background: #1f1b16;
+        color: #f7f1e7;
+        border-color: transparent;
       }
 
       .btn-outline {
-        background: transparent;
-        border: 1px solid #c7b197;
-        color: #6b553b;
+        background: #fffdf8;
       }
 
-      .btn-sub {
-        background: #f1e4d4;
-        color: #5a4130;
-      }
-
-      .btn-primary:hover {
-        background: linear-gradient(135deg, #241c18, #3f2e21);
-      }
-
-      .btn-outline:hover {
-        background: rgba(255, 255, 255, 0.65);
-      }
-
-      .btn-sub:hover {
-        background: #e8d4be;
-      }
-
-      .eo-section-title {
-        font-size: 0.78rem;
-        font-weight: 600;
-        margin: 6px 0 2px;
-        color: #5b4833;
-      }
-
-      .eo-card {
-        border-radius: 10px;
-        border: 1px solid #e2d2bc;
-        background: #fbf5ec;
-        padding: 6px 7px;
-        margin-bottom: 4px;
-      }
-
-      .eo-name {
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-bottom: 2px;
-      }
-
-      .eo-line {
-        font-size: 0.74rem;
-        color: #836c4f;
-      }
-
-      .eo-line.caution {
-        color: #b0523b;
-      }
-
-      .small-muted {
-        font-size: 0.72rem;
-        color: #a08c6c;
-      }
-
-      .report-box {
-        border-radius: 10px;
-        border: 1px solid #e2d2bd;
-        background: #fbf5ec;
-        padding: 8px 9px;
-        font-size: 0.78rem;
-        min-height: 180px;
-        white-space: pre-wrap;
-      }
-
-      .photo-compare {
+      .card-header-row {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
         gap: 12px;
-        margin-top: 8px;
-        flex-wrap: wrap;
       }
 
-      .photo-column {
-        flex: 1 1 160px;
-        min-width: 0;
+      .photo-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 720px) {
+        .photo-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .photo-box {
+        border: 1px dashed rgba(43, 34, 21, 0.22);
+        border-radius: 14px;
+        background: #fffdf8;
+        padding: 10px;
       }
 
       .photo-preview {
-        margin-top: 4px;
-        border-radius: 10px;
-        border: 1px solid #e3d6c5;
-        background: #fbf5ec;
-        padding: 6px;
-        min-height: 120px;
+        margin-top: 10px;
+        height: 160px;
+        border-radius: 14px;
+        background: #faf2e7;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.78rem;
-        color: #a8926b;
-        text-align: center;
-      }
-
-      .photo-preview img {
-        max-width: 100%;
-        max-height: 220px;
-        border-radius: 8px;
-        object-fit: cover;
-        display: block;
+        color: rgba(43, 34, 21, 0.55);
+        font-weight: 700;
       }
     </style>
   </head>
 
   <body>
-   <div id="webOnlyHint" class="hint-box web-only" style="margin-bottom:12px;">
-  설치 앱으로 실행하면 주소창 없이 더 빠르고 안정적으로 사용할 수 있습니다.
-</div>
-
-<div class="app-title">Client Care Chart</div>
-
-      <div class="app-subtitle">
-        Aroma el lagom dives · 1:1 Private Aromatherapy &amp; Bamboo Therapy
+    <div class="app-shell">
+      <h1 class="title">Client Care Chart</h1>
+      <div class="subtitle">
+        Aroma el lagom dives · 1:1 Private Aromatherapy & Bamboo Therapy
       </div>
 
       <div class="top-bar">
-        <div class="top-bar-left">
-          <div class="brand-badge">AROMA EL LAGOM DIVES</div>
-          <div class="today-chip">
-            오늘 상담일자 :
-            <span id="todayDisplay">0000-00-00</span>
-          </div>
-        </div>
-        <div class="top-bar-right">
-  <!-- 앱 모드에서만 보이게 -->
-  <span id="appModeBadge" class="pill app-only" style="display:none;">APP MODE</span>
-
-  <!-- 웹(브라우저)에서만 보이게 / 앱 모드에서는 숨김 -->
-  <span class="pill dev-pill web-only">PC · 모바일 동시 사용</span>
-  <span class="pill dev-pill web-only">Firebase Sync</span>
-  <span class="pill dev-pill web-only">로블코코 · 엘라곰 제품 연동</span>
-</div>
-
+        <div class="brand-pill">AROMA EL LAGOM DIVES</div>
+        <div class="pill">오늘 상담일자 : <span id="todayDate">0000-00-00</span></div>
+        <div style="flex:1"></div>
+        <div class="pill">PC · 모바일 동시 사용</div>
+        <div class="pill">Firebase Sync</div>
+        <div class="pill">로블코코 · 엘라곰 제품 연동</div>
+      </div>
 
       <div class="layout">
         <!-- LEFT COLUMN -->
         <div>
-          <!-- 01. CLIENT PROFILE -->
           <div class="card">
-            <div class="card-header-row">
+            <div class="card-title">01. CLIENT PROFILE</div>
+            <div class="card-caption">고객 기본 정보 · 체질 · 주의사항 · 오늘 컨디션</div>
+
+            <div class="divider"></div>
+
+            <div class="grid2">
               <div>
-                <div class="card-title">01. CLIENT PROFILE</div>
-                <div class="card-caption">
-                  고객 기본 정보 · 체질 · 주의사항 · 오늘 컨디션
-                </div>
+                <label>고객 이름 *</label>
+                <input id="clientName" placeholder="예) 노연업" />
               </div>
-              <div class="button-row">
-                <input
-                  id="searchKeyword"
-                  type="text"
-                  placeholder="이름 또는 연락처 검색"
-                  style="min-width: 140px"
-                />
-                <button class="btn btn-outline" onclick="searchClient()">
-                  고객 검색
-                </button>
-              </div>
-            </div>
 
-            <div class="field-row">
-              <div class="field">
-                <label class="field-label">고객 이름 *</label>
-                <input
-                  id="clientName"
-                  type="text"
-                  placeholder="예) 홍길동"
-                  autocomplete="off"
-                />
+              <div>
+                <label>연락처(핸드폰) *</label>
+                <input id="clientPhone" placeholder="예) 010-0000-0000" />
               </div>
-              <div class="field">
-                <label class="field-label">연락처(핸드폰) *</label>
-                <input
-                  id="clientPhone"
-                  type="tel"
-                  placeholder="예) 010-0000-0000"
-                  autocomplete="off"
-                />
-              </div>
-            </div>
 
-            <div class="field-row">
-              <div class="field">
-                <label class="field-label">연령대</label>
+              <div>
+                <label>연령대</label>
                 <select id="ageRangeSelect">
                   <option value="">선택</option>
+                  <option value="10대">10대</option>
                   <option value="20대">20대</option>
                   <option value="30대">30대</option>
                   <option value="40대">40대</option>
                   <option value="50대">50대</option>
-                  <option value="60대 이상">60대 이상</option>
+                  <option value="60대+">60대+</option>
                 </select>
               </div>
-              <div class="field">
-                <label class="field-label">체질 · 특이사항</label>
-                <input
-                  id="clientConstitution"
-                  type="text"
-                  placeholder="냉/열체질, 위염, 두통, 과민성대장 등"
-                />
+
+              <div>
+                <label>체질 · 특이사항</label>
+                <input id="clientConstitution" placeholder="예) 유방암, 자궁암 수술 항암중" />
               </div>
             </div>
 
-            <div class="field">
-              <label class="field-label">CLIENT NOTE</label>
-              <textarea
-                id="clientNote"
-                placeholder="예) 48세 여성, 수족냉증·완경 시작, 수면 불규칙, 복부·하체 비만, 저혈압, 알러지약 복용 중 등"
-              ></textarea>
+            <div style="margin-top: 12px">
+              <label>CLIENT NOTE</label>
+              <textarea id="clientNote" placeholder="고객 메모"></textarea>
             </div>
 
-            <hr class="divider" />
+            <div class="divider"></div>
 
-            <div class="section-title">
-              주의해야 할 상황 · Contra-indication
-            </div>
-            <div id="safetyTags" class="tag-group">
-              <label class="tag negative">
-                <input type="checkbox" value="임신 가능성/임산부" />
-                임신 가능성/임산부
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="수유 중" />
-                수유 중
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="고혈압" />
-                고혈압
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="저혈압" />
-                저혈압
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="혈전/심혈관 질환" />
-                혈전/심혈관 질환
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="간/신장 질환" />
-                간/신장 질환
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="갑상선 질환" />
-                갑상선 질환
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="항우울제/수면제 복용" />
-                항우울제/수면제 복용
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="피부 알러지/민감성" />
-                피부 알러지/민감성
-              </label>
-              <label class="tag negative">
-                <input type="checkbox" value="암/항암 치료 중/후" />
-                암/항암 치료 중/후
-              </label>
+            <div class="grid2">
+              <div>
+                <label>고객 검색(전화번호 또는 이름)</label>
+                <input id="searchKeyword" placeholder="예) 01067003784 또는 노연업" />
+                <button class="btn btn-outline" onclick="searchClient()">고객 검색</button>
+              </div>
             </div>
 
-            <div class="hint-box">
-              <strong>주의 체크는 EO 선택 안전 가이드에 함께 반영</strong
-              >됩니다. 실제 사용 여부·농도는 반드시 원장님이 최종 판단합니다.
+            <div class="section-title">주의해야 할 상황 · Contra-indication</div>
+            <div class="tagbox" id="contraTags">
+              <label class="tag red"><input type="checkbox" value="임신 가능성/임산부" />임신 가능성/임산부</label>
+              <label class="tag red"><input type="checkbox" value="수유 중" />수유 중</label>
+              <label class="tag red"><input type="checkbox" value="고혈압" />고혈압</label>
+              <label class="tag red"><input type="checkbox" value="저혈압" />저혈압</label>
+              <label class="tag red"><input type="checkbox" value="혈전/심혈관 질환" />혈전/심혈관 질환</label>
+              <label class="tag red"><input type="checkbox" value="간/신장 질환" />간/신장 질환</label>
+              <label class="tag red"><input type="checkbox" value="갑상선 질환" />갑상선 질환</label>
+              <label class="tag red"><input type="checkbox" value="항우울제/수면제 복용" />항우울제/수면제 복용</label>
+              <label class="tag red"><input type="checkbox" value="피부 알러지/민감성" />피부 알러지/민감성</label>
+              <label class="tag red"><input type="checkbox" value="암/항암 치료 중/후" />암/항암 치료 중/후</label>
             </div>
 
-            <hr class="divider" />
-
-            <div class="section-title">
-              오늘 방문 목적 · 주요 컨디션 · 증상 선택
+            <div class="helper-box">
+              주의 체크는 EO 선택 안전 가이드에 함께 반영됩니다. 실제 사용 여부·농도는 반드시 원장님이 최종 판단합니다.
             </div>
 
-            <div class="field">
-              <label class="field-label">방문 목적 / 오늘 컨디션 메모</label>
+            <div class="divider"></div>
+
+            <div class="card-title" style="font-size:16px">오늘 방문 목적 · 주요 컨디션 · 증상 선택</div>
+
+            <div style="margin-top: 10px">
+              <label>방문 목적 / 오늘 컨디션 메모</label>
               <textarea
                 id="visitReason"
-                placeholder="예) 골반통 + 생리 전 부종, 3일째 불면, 업무 스트레스로 어깨·목 결림, 소화불량 등"
+                placeholder="예) 골반통 + 생리 전 부종, 3일째 불면, 업무 스트레스로 어깨·목 결림..."
               ></textarea>
             </div>
 
-            <div class="field">
-              <label class="field-label">오늘 주요 증상 선택 (복수 선택 가능)</label>
-              <div id="symptomTags" class="tag-group">
-                <label class="tag positive">
-                  <input type="checkbox" value="pain" />
-                  근육통/결림/요통
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="edema" />
-                  부종/림프정체
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="fatigue" />
-                  피로/무기력
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="stress" />
-                  스트레스/불안
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="sleep" />
-                  수면장애/불면
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="digest" />
-                  소화불량/위장
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="hormone" />
-                  호르몬(PMS/갱년기)
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="skin" />
-                  피부트러블/민감
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="brain" />
-                  두통/집중저하/브레인
-                </label>
-                <label class="tag positive">
-                  <input type="checkbox" value="postpartum" />
-                  산후관리/골반·허리
-                </label>
-              </div>
+            <div class="section-title">오늘 주요 증상 선택 (복수 선택 가능)</div>
+            <div class="tagbox" id="symptomTags">
+              <label class="tag green"><input type="checkbox" value="근육통/결림/요통" />근육통/결림/요통</label>
+              <label class="tag green"><input type="checkbox" value="부종/림프정체" />부종/림프정체</label>
+              <label class="tag green"><input type="checkbox" value="피로/무기력" />피로/무기력</label>
+              <label class="tag green"><input type="checkbox" value="스트레스/불안" />스트레스/불안</label>
+              <label class="tag green"><input type="checkbox" value="수면장애/불면" />수면장애/불면</label>
+              <label class="tag green"><input type="checkbox" value="소화불량/위장" />소화불량/위장</label>
+              <label class="tag green"><input type="checkbox" value="호르몬(PMS/갱년기)" />호르몬(PMS/갱년기)</label>
+              <label class="tag green"><input type="checkbox" value="피부트러블/민감" />피부트러블/민감</label>
+              <label class="tag green"><input type="checkbox" value="두통/집중저하/브레인" />두통/집중저하/브레인</label>
+              <label class="tag green"><input type="checkbox" value="산후관리/골반·허리" />산후관리/골반·허리</label>
             </div>
 
-            <div class="button-row">
-              <button class="btn btn-sub" onclick="renderEoRecommendations()">
-                증상 기반 EO 추천 보기
-              </button>
+            <div class="btn-row">
+              <button class="btn btn-outline" onclick="updateEoGuideBySymptoms()">증상 기반 EO 추천 보기</button>
             </div>
           </div>
 
-          <!-- 02. CARE PROGRAM · PACKAGE -->
+          <div style="height: 14px"></div>
+
           <div class="card">
-            <div class="card-header-row">
+            <div class="card-title">02. PROGRAM · PRICE · NEXT</div>
+            <div class="card-caption">관리 프로그램 선택 · 회차권/금액권 관리 · 다음 방문 추천</div>
+
+            <div class="divider"></div>
+
+            <label>관리 프로그램 선택 *</label>
+            <select id="programSelect"></select>
+
+            <div class="divider"></div>
+
+            <div class="card-title" style="font-size:16px">프로그램 금액 (총 정가 / 실제 결제)</div>
+            <div class="grid2" style="margin-top: 10px">
               <div>
-                <div class="card-title">02. CARE PROGRAM · PACKAGE</div>
-                <div class="card-caption">
-                  관리 프로그램 선택 · 회차권/금액권 관리 · 다음 방문 추천
-                </div>
+                <label>프로그램 정가 (총 정가 기준)</label>
+                <input id="programListPriceInput" placeholder="예) 1800000" />
               </div>
-              <div class="inline-note">
-                프로그램은 Firestore
-                <strong>config_programs</strong> 컬렉션에서 관리합니다.
+              <div>
+                <label>실제 결제 금액 (할인 적용 후)</label>
+                <input id="programPaidPriceInput" placeholder="예) 1500000" />
               </div>
             </div>
 
-            <div class="field">
-              <label class="field-label">관리 프로그램 선택 *</label>
-              <select id="programSelect">
-                <option value="">프로그램 선택</option>
-              </select>
-              <div class="inline-note">
-                선택한 프로그램에 따라 기본 정가, 기준 회차 수, 권장 간격이
-                불러와집니다.
-              </div>
-            </div>
-
-            <div class="small-row">
-              <span class="field-label small">프로그램 상태</span>
-              <span id="programStatus" class="muted" style="font-size: 0.72rem"
-                >선택 전</span
-              >
-            </div>
-
-            <hr class="divider" />
-
-            <div class="section-title">프로그램 금액 (총 정가 / 실제 결제)</div>
-            <div class="field-row">
-              <div class="field">
-                <label class="field-label">프로그램 정가 (총 정가 기준)</label>
-                <input
-                  id="programBasePrice"
-                  type="number"
-                  placeholder="예) 1800000"
-                />
-                <div id="packageListPriceDisplay" class="field-note">
-                  예: 180,000원 × 10회 = 1,800,000원 (정가 기준)
-                </div>
-              </div>
-              <div class="field">
-                <label class="field-label">실제 결제 금액 (할인 적용 후)</label>
-                <input
-                  id="programFinalPrice"
-                  type="number"
-                  placeholder="예) 1500000"
-                />
-                <div class="field-note">
-                  고객이 실제로 결제한 총 금액 (할인/서비스 반영)
-                </div>
-              </div>
-            </div>
-
-            <div class="hint-box">
-              <strong>프로그램 정가</strong>는 가격표 기준 총 정가,
-              <strong>실제 결제 금액</strong>은 고객이 실제 결제한 금액입니다.
+            <div class="helper-box">
+              프로그램 정가는 가격표 기준 총 정가, 실제 결제 금액은 고객이 실제 결제한 금액입니다.
               회차권/금액권 계산에는 실제 결제 금액을 기준으로 관리합니다.
             </div>
 
-            <hr class="divider" />
+            <div class="divider"></div>
 
             <div class="section-title">권종 유형</div>
-            <div class="small-row">
-              <span class="field-label small">권종 선택</span>
-              <div class="tag-group">
-                <label class="tag">
-                  <input
-                    type="radio"
-                    name="programType"
-                    value="sessions"
-                    checked
-                  />
-                  회차권 (횟수 차감)
-                </label>
-                <label class="tag">
-                  <input type="radio" name="programType" value="amount" />
-                  금액권 / 회원권 (잔액 차감)
-                </label>
+            <div class="tagbox">
+              <label class="tag"><input type="radio" name="packageType" value="sessions" checked />회차권 (횟수 차감)</label>
+              <label class="tag"><input type="radio" name="packageType" value="membership" />금액권 / 회원권 (잔액 차감)</label>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section-title">회차권 설정</div>
+            <div class="grid2">
+              <div>
+                <label>1회 정가</label>
+                <input id="sessionUnitPriceInput" placeholder="예) 180000" />
+              </div>
+              <div>
+                <label>총 횟수</label>
+                <input id="sessionTotalCountInput" placeholder="예) 10" />
+              </div>
+              <div>
+                <label>사용 횟수 (오늘 방문 전까지)</label>
+                <input id="sessionUsedCountInput" placeholder="예) 1" />
+              </div>
+              <div>
+                <label>남은 횟수 / 다음 방문 추천일</label>
+                <input id="nextVisitHint" placeholder="프로그램 intervalDays 기준으로 자동 계산됩니다." disabled />
               </div>
             </div>
 
-            <!-- 회차권 -->
-            <div id="sessionPackageBox">
-              <div class="section-title">회차권 설정</div>
-              <div class="field-row">
-                <div class="field">
-                  <label class="field-label">1회 정가</label>
-                  <input
-                    id="sessionUnitPrice"
-                    type="number"
-                    placeholder="예) 180000"
-                  />
-                  <div id="packageListPriceDisplay" class="field-note">
-                    예: 180,000원 × 10회 = 1,800,000원 (정가 기준)
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="field-label">총 횟수</label>
-                  <input
-                    id="totalSessionsInput"
-                    type="number"
-                    placeholder="예) 10"
-                  />
-                  <div class="field-note">
-                    프로그램 구매 시 총 관리 횟수 (예: 10회, 20회 등)
-                  </div>
-                </div>
-              </div>
-
-              <div class="field-row">
-                <div class="field">
-                  <label class="field-label">사용 횟수 (오늘 방문 전까지)</label>
-                  <input
-                    id="usedSessionsInput"
-                    type="number"
-                    placeholder="예) 1"
-                  />
-                </div>
-                <div class="field">
-                  <label class="field-label">남은 횟수 / 다음 방문 추천일</label>
-                  <div class="muted" id="remainingSessionsDisplay">-</div>
-                  <div class="muted">
-                    다음 권장일 :
-                    <span id="nextAppointmentDisplay">-</span>
-                  </div>
-                  <div class="field-note">
-                    프로그램 intervalDays 기준으로 자동 계산됩니다.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 금액권/회원권 -->
-            <div id="membershipBox" style="display: none; margin-top: 8px">
-              <div class="section-title">금액권 / 회원권 관리</div>
-
-              <div class="field-row">
-                <div class="field">
-                  <label class="field-label">회원권 총 금액</label>
-                  <input
-                    id="membershipTotalAmount"
-                    type="number"
-                    placeholder="예) 1000000"
-                  />
-                  <div class="field-note">
-                    예: 연 회원권 1,000,000원 / 월 정액 회원권 등
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="field-label">이번 방문 사용 금액</label>
-                  <input
-                    id="membershipUseToday"
-                    type="number"
-                    placeholder="예) 150000"
-                  />
-                </div>
-              </div>
-
-              <div class="field-row">
-                <div class="field">
-                  <label class="field-label">이전 방문까지 잔액</label>
-                  <div
-                    id="membershipPrevBalanceDisplay"
-                    class="muted"
-                    data-value=""
-                  >
-                    -
-                  </div>
-                  <div class="field-note">
-                    이전 세션 잔액이 자동 불러와집니다. 없으면 총 금액에서
-                    계산합니다.
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="field-label">이번 방문 후 예상 잔액</label>
-                  <div id="membershipNewBalanceDisplay" class="muted">-</div>
-                </div>
-              </div>
-
-              <div class="field-row">
-                <div class="field">
-                  <label class="field-label">회원권 관리 기한 (만료일)</label>
-                  <input id="membershipExpireDate" type="date" />
-                </div>
-                <div class="field">
-                  <label class="field-label">관리 기한 연장 메모</label>
-                  <input
-                    id="membershipExtendNote"
-                    type="text"
-                    placeholder="예) 1개월 연장, 출산 후 복귀까지 보류 등"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="hint-box">
-              회차권은 <strong>“횟수”</strong>, 회원권은
-              <strong>“잔액”</strong> 기준으로 관리합니다. 한 고객이 두 가지를
-              동시에 가지고 있어도, 오늘 어떤 기준으로 사용했는지만 정확히
-              기록하면 됩니다.
+            <div class="helper-box">
+              회차권은 ‘횟수’, 회원권은 ‘잔액’ 기준으로 관리합니다.
+              한 고객이 두 가지를 동시에 가지고 있어도, 오늘 어떤 기준으로 사용했는지만 정확히 기록하면 됩니다.
             </div>
           </div>
 
-          <!-- 03. TODAY SESSION · RECIPE -->
+          <div style="height: 14px"></div>
+
           <div class="card">
-            <div class="card-header-row">
-              <div>
-                <div class="card-title">03. TODAY SESSION · RECIPE</div>
-                <div class="card-caption">
-                  오늘 실제 시술 내용 · EO 실전 레시피(원장 판단) · 다음 계획
-                </div>
-              </div>
-            </div>
+            <div class="card-title">03. TODAY SESSION · RECIPE</div>
+            <div class="card-caption">오늘 실제 시술 내용 · EO 실전 레시피(원장 판단) · 다음 계획</div>
 
-            <div class="field">
-              <label class="field-label">오늘 실제 시술 내용 / 부위</label>
-              <textarea
-                id="sessionTechniques"
-                placeholder="예) 온열뱀부 전신 (복부+골반+하체 집중), 림프드레나지, 복부 온찜, 두피·측두부 브레인 테라피 등"
-              ></textarea>
-            </div>
+            <div class="divider"></div>
 
-            <div class="field">
-              <label class="field-label"
-                >오늘 사용한 제품 (로블코코 / 엘라곰 / 기타)</label
-              >
-              <textarea
-                id="sessionProducts"
-                placeholder="예) 로블코코 궁 오일 + 커피&amp;씨솔트 슬림스크럽 + 엘라곰 시그니처 바디오일, 홈케어용 로블코코 Y존 궁 제품 추천 등"
-              ></textarea>
-            </div>
+            <label>오늘 실제 시술 내용 / 부위</label>
+            <textarea id="sessionTechniques" placeholder="예) 온열뱀부 전신, 림프드레나지, 복부 온찜, 브레인 테라피 등"></textarea>
 
-            <div class="field">
-              <label class="field-label">EO 실전 레시피 (원장 전용 메모)</label>
-              <textarea
-                id="eoRecipeNote"
-                placeholder="예) 마조람 3g + 제라늄 2g + 라벤더 3g / 호호바 100ml 기준 8% 등. 고객 체질·질환·복용약 고려해 매 방문마다 조정."
-              ></textarea>
-              <div class="field-note">
-                여기에는 실제 블렌딩 비율을 기록합니다. 자동 추천은 참고용이며,
-                최종 레시피는 원장님 판단으로만 결정하는 영역입니다.
-              </div>
-            </div>
+            <label style="margin-top: 12px">오늘 사용한 제품 (로블코코 / 엘라곰 / 기타)</label>
+            <textarea id="sessionProducts" placeholder="예) 로블코코 00오일 + 엘라곰 바디오일, 홈케어 추천 등"></textarea>
 
-            <div class="field">
-              <label class="field-label">다음 회차 계획 · 홈케어 안내</label>
-              <textarea
-                id="sessionNextPlan"
-                placeholder="예) 1주 간격 3회 추가 권장, 온열뱀부 골반 집중 + 림프 케어, 집에서는 궁 좌훈 + 아로마 솔트 반신욕 주 3회, 카페인·야식 줄이기 등"
-              ></textarea>
-            </div>
+            <label style="margin-top: 12px">EO 실전 레시피 (원장 전용 메모)</label>
+            <textarea id="eoRecipeNote" placeholder="예) 마조람 3g + 제라늄 2g + 라벤더 3g ..."></textarea>
 
-            <div class="button-row">
-              <button class="btn btn-outline" onclick="generateReportPreview()">
-                자동 상담 리포트 미리보기
-              </button>
-              <button class="btn btn-outline" onclick="generateSummaryReport()">
-                누적 상담 리포트 생성
-              </button>
-              <button class="btn btn-primary" onclick="saveSession()">
-                오늘 상담 내용 저장
-              </button>
+            <label style="margin-top: 12px">다음 회차/홈케어 계획 · 추천 안내</label>
+            <textarea id="sessionNextPlan" placeholder="예) 1주 간격 3회 추가 권장, 홈케어는 ..."></textarea>
+
+            <div class="btn-row">
+              <button class="btn btn-outline" onclick="generateReportPreview()">자동 상담 리포트 미리보기</button>
+              <button class="btn btn-outline" onclick="generateSummaryReport()">누적 상담 리포트 생성</button>
+              <button class="btn btn-outline" onclick="loadLastSession()">최근 상담 불러오기</button>
+              <button class="btn btn-primary" onclick="saveSession()">오늘 상담 내용 저장</button>
             </div>
           </div>
         </div>
 
         <!-- RIGHT COLUMN -->
         <div>
-          <!-- EO GUIDE -->
           <div class="card">
             <div class="card-header-row">
               <div>
                 <div class="card-title">SYMPTOM-BASED EO GUIDE</div>
-                <div class="card-caption">
-                  증상·주의사항에 맞춘 EO 효능 · 희석 · 주의점 안내
-                </div>
+                <div class="card-caption">증상·주의사항에 맞춘 EO 효능 · 희석 · 주의점 안내</div>
               </div>
             </div>
 
             <div class="section-title">1) 증상 기반 EO 추천</div>
             <div id="eoRecommendations" class="muted">
-              증상을 선택한 뒤 왼쪽의
-              <strong>“증상 기반 EO 추천 보기”</strong> 버튼을 눌러주세요.
-              각 EO마다 효능·희석·주의점이 함께 표시됩니다.
+              증상을 선택한 뒤 왼쪽의 “증상 기반 EO 추천 보기” 버튼을 눌러주세요.
             </div>
 
-            <hr class="divider" />
+            <div class="divider"></div>
 
             <div class="section-title">2) 프로그램별 EO · 제품 추천</div>
-            <div id="programProductRecommendations" class="muted">
-              관리 프로그램을 선택하면, 해당 프로그램에 최적화된 EO 세트와
-              로블코코/엘라곰 제품 추천 리스트가 표시됩니다.
+            <div id="programRecommendations" class="muted">
+              관리 프로그램을 선택하면, 해당 프로그램에 최적화된 EO 세트와 로블코코/엘라곰 제품 추천 리스트가 표시됩니다.
             </div>
           </div>
 
-          <!-- REPORT & PHOTOS -->
-          <div class="card" style="margin-top: 10px">
+          <div style="height: 14px"></div>
+
+          <div class="card">
             <div class="card-header-row">
               <div>
                 <div class="card-title">자동 상담 리포트 · BEFORE/AFTER</div>
-                <div class="card-caption">
-                  고객 설명용 리포트 + 세션별 전후 사진 기록
-                </div>
+                <div class="card-caption">고객 설명용 리포트 + 세션별 전후 사진 기록</div>
               </div>
-              <div class="button-row">
-                <button class="btn btn-outline" onclick="downloadReportPdf()">
-                  리포트 PDF 다운로드
-                </button>
-              </div>
+              <button class="btn btn-outline" onclick="downloadReportPdf()">리포트 PDF 다운로드</button>
             </div>
 
             <div class="section-title">자동 상담 리포트</div>
-            <div id="autoReport" class="report-box">
-아직 리포트가 생성되지 않았습니다.
-왼쪽 정보를 입력한 후 “자동 상담 리포트 미리보기” 버튼을 눌러주세요.
+            <div id="reportPreview" class="photo-box" style="min-height: 160px">
+              아직 리포트가 생성되지 않았습니다.<br />
+              왼쪽 정보를 입력한 후 “자동 상담 리포트 미리보기” 버튼을 눌러주세요.
             </div>
 
-            <hr class="divider" />
+            <div class="divider"></div>
 
-            <div class="section-title">
-              전후 사진 비교
-              <span
-                style="font-size: 0.7rem; font-weight: 400; margin-left: 4px"
-              >
-                (선택 사항 · 세션별 Before / After 저장)
-              </span>
-            </div>
-            <div class="photo-compare">
-              <div class="photo-column">
-                <div class="field-label small">Before 사진</div>
-                <input type="file" id="beforePhotoInput" accept="image/*" />
-                <div class="photo-preview" id="beforePhotoPreview">
-                  전후 비교를 위해 Before 사진을 업로드해 주세요.
-                </div>
+            <div class="section-title">전후 사진 비교 (선택 사항 · 세션별 Before / After 저장)</div>
+            <div class="photo-grid">
+              <div class="photo-box">
+                <div style="font-weight: 800">Before 사진</div>
+                <input id="beforePhotoInput" type="file" accept="image/*" style="margin-top: 8px" />
+                <div class="photo-preview">전후 비교를 위해 Before 사진을 업로드해 주세요.</div>
               </div>
-              <div class="photo-column">
-                <div class="field-label small">After 사진</div>
-                <input type="file" id="afterPhotoInput" accept="image/*" />
-                <div class="photo-preview" id="afterPhotoPreview">
-                  관리 후 After 사진을 업로드해 주세요.
-                </div>
+
+              <div class="photo-box">
+                <div style="font-weight: 800">After 사진</div>
+                <input id="afterPhotoInput" type="file" accept="image/*" style="margin-top: 8px" />
+                <div class="photo-preview">관리 후 After 사진을 업로드해 주세요.</div>
               </div>
             </div>
           </div>
@@ -1029,9 +551,6 @@
     <script src="./app.js"></script>
   </body>
 </html>
-
-
-
 
 
 
